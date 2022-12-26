@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block mycss %}
+  <style>
+    .error{
+      color:red;
+    }
+  </style>
+
+  <style>
+    .success{
+      color:green;
+    }
+  </style>
+{% endblock mycss %}
+
+{% block content %}
+<!-- <main class="form-signin w-100 m-auto"> -->
+  <div class="container-fluid bg-primary bg-opacity-75">
+    <div class="row g-5">
+      <div class="col-8 p-5">
+        <img src="{% static 'img/logo.png' %}" width="230">
+        <h1 class="text-white fw-bolder">Welcome to the new BPLS of the City of Dulag, Leyte!</h1>
+        <p class="text-white">Register an account now and apply for your new Business Permit</p>
+        <div class="row">
+          {% include 'partials/_faq.html' %}
+        </div>
+      </div>
+      <div class="col-4 bg-light">
+        <img class="mb-4 img-fluid mx-auto d-block p-3" style="width:180px;" src="{% static 'img/logo.png' %}" alt="">
+          <h1 class="h3 mb-3 fw-bold text-center">Business Permit and License Registration System
+          </h1>
+          <p class="text-center">Dulag, Leyte</p>
+          
+        <form id="registerForm" method="POST" action="{% url 'authentication:register' %}">
+          {% csrf_token %}
+          
+          {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+          
+          <div class="row g-2">
+            <div class="col-md mb-2">
+              <div class="form-floating">
+                <input type="text" name="first_name" id="first_name_register" class="form-control" aria-label="First name" required>
+                <label for="first_name">First name</label>
+              </div>
+            </div>
+            <div class="col-md mb-2">
+              <div class="form-floating">
+                <input type="text" name="last_name" id="last_name_register" class="form-control" aria-label="Last name" required>
+                <label for="last_name">Last name</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-floating col-12 mb-2">
+            <input type="email" name="email" class="form-control" id="emailRegister" placeholder="name@example.com" required>
+            <label for="emailRegister">Email address</label>
+          </div>
+          <div class="form-floating col-12 mb-2">
+            <input type="password" name="password1" class="form-control" id="passwordRegister" placeholder="Password" required>
+            <label for="passwordRegister">Password</label>
+          </div>
+          <div class="form-floating col-12 mb-2">
+            <input type="password" name="password2" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+            <label for="confirmPassword">Confirm Password</label>
+          </div>
+          <div class="col-12">
+            <button class="w-100 btn btn-lg btn-success my-4 text-upper" type="submit">Create account</button>
+            <p class="text-center"> Already a member? <a href="{% url 'authentication:login' %}" class="text-blue-500">Sign in here.</a></p>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  <!-- </main> -->
+  {% endblock %}  
