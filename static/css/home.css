@@ -1,0 +1,77 @@
+.sidebar{
+    background-color: #425569;
+    border-radius: .375rem;
+}
+
+.nav-link{
+    text-align: left;
+}
+
+
+.nav-pills .nav-link:not(.active){
+    
+    color: white !important;
+}
+
+.nav-link:hover{
+    background-color: rgb(156 163 175) !important;
+}
+
+.nav-pills .active{
+    background-color: white !important;
+    color: black !important;
+}
+
+.tab-content{
+    background-color: rgb(241 245 249);
+    border-radius: .375rem;
+}
+
+thead{
+    background-color: rgb(249 250 251);
+}
+
+th{
+    text-transform: uppercase;
+    font-size: .75rem;
+    line-height: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+tr{
+    font-family: 'Inter', sans-serif;
+}
+
+th a{
+    color: rgb(55 65 81);
+}
+
+td{
+    color:rgb(107 114 128);
+    font-size: .875rem;
+    line-height: 1.25rem;
+}
+
+[colspan|="5"] {
+    color: rgb(200 30 30);
+    text-align:center;
+}
+
+.business-form-section{
+    text-align: center;
+    text-transform: uppercase;
+    background-color: aliceblue;
+}
+
+.bordered-section{
+    border: black solid 1px;
+}
+
+.form-logo{
+    width:16%;
+    height: auto;
+}
+
+.underlined{
+    border-bottom: black solid 1px;
+}

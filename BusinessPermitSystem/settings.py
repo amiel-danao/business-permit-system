@@ -41,9 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
     'system',
+    'crispy_bootstrap5',
+    'django_filters',
+    'django_tables2',
+    'django_bootstrap5',
+    'bootstrap4',
     'django_flatpickr',
     'crispy_forms',
-    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [

@@ -12,6 +12,7 @@ def register_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Registration successful.")
+            form = RegisterForm()
             return redirect('system:index')
         else:
             password1 = form.data['password1']
