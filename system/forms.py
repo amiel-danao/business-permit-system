@@ -34,10 +34,20 @@ class BusinessPermitForm(forms.ModelForm):
         regex='^(?:\d{12})$',
         error_messages = {'invalid': _("Please follow the correct Pag-ibig No. format ex: xxxxxxxxxxxx")}, label='Pag-ibig No.')
 
+    rent_start = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Rent start(monthly/year)', required=False)
+
+    barangay_business_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    location_zoning_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    health_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    occupancy_permit_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    fire_safety_inspection_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    police_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+    others_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+
     class Meta:
         model = BusinessPermit
         fields = '__all__'
-        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'business_type')
+        exclude = ('reference_no', 'user', 'owners_gender', 'status')
         
 
     def __init__(self, *args, **kwargs):
@@ -78,6 +88,27 @@ class BusinessPermitForm(forms.ModelForm):
         self.fields['paid_up_2'].label = False
         self.fields['paid_up_3'].label = False
         self.fields['paid_up_4'].label = False
+
+        self.fields['owner_rented_name'].label = False
+        self.fields['owner_rented_address'].label = False
+
+        self.fields['barangay_business_clearance_date'].label = False
+        self.fields['location_zoning_clearance_date'].label = False
+        self.fields['health_clearance_date'].label = False
+        self.fields['occupancy_permit_clearance_date'].label = False
+        self.fields['fire_safety_inspection_clearance_date'].label = False
+        self.fields['police_clearance_date'].label = False
+        self.fields['others_clearance_date'].label = False
+
+        self.fields['barangay_business_clearance_verified_by'].label = False
+        self.fields['location_zoning_clearance_verified_by'].label = False
+        self.fields['health_clearance_verified_by'].label = False
+        self.fields['occupancy_permit_clearance_verified_by'].label = False
+        self.fields['fire_safety_inspection_clearance_verified_by'].label = False
+        self.fields['police_clearance_verified_by'].label = False
+        self.fields['others_clearance_verified_by'].label = False
+        
+        
         
         
         

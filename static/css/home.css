@@ -142,3 +142,11 @@ table tr .column-label{
 .form-table-input input[type=number] {
   -moz-appearance: textfield;
 }
+
+#table_verification_documents td{
+    font-size: 0.8rem;
+}
+
+#table_verification_documents td div{
+    margin: 0px !important;
+}

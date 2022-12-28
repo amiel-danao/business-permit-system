@@ -353,6 +353,222 @@
 
                         <div class="row pt-2"></div>
 
+                        <div class="row bordered-section">
+                            <div class="col-12">
+                                <p class="business-form-section my-auto fw-bold">In place of business is rented/not owned</p>
+                            </div>
+                        </div>
+
+                        <div class="row bordered-section">
+                            <div class="container">
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Name of owner</span>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.owner_rented_name %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Address</span>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.owner_rented_address %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.administrator_name %}
+                                    </div>
+                                </div>
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-6 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.rent_start %}
+                                    </div>
+                                    <div class="col-6 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.rent_per_month %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pt-2"></div>
+
+                        <div class="row bordered-section">
+                            <div class="container">
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-8 mx-0 p-1 border-right border-dark">
+                                        <small class="text-uppercase">Kind of ownership</small>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="business_type" id="business_type_1" value="1" checked>
+                                            <label class="form-check-label" for="business_type_1">Sole Proprietorship</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="business_type" id="business_type_2" value="2">
+                                            <label class="form-check-label" for="business_type_2">One Person Corporation</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="business_type" id="business_type_3" value="3">
+                                            <label class="form-check-label" for="business_type_3">Partnership</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="business_type" id="business_type_4" value="4">
+                                            <label class="form-check-label" for="business_type_4">Corporation</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="business_type" id="business_type_5" value="5">
+                                            <label class="form-check-label" for="business_type_5">People's Organization</label>
+                                        </div>
+                            
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.dole_reg_no %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.dole_date_issued %}
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-5 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.location_clearance_no %}
+                                    </div>
+                                    <div class="col-3 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.location_clearance_date_issued %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.certificate_of_occupancy_no %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.certificate_of_occupancy_date_issued %}
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-5 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.sec_reg_no %}
+                                    </div>
+                                    <div class="col-3 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.sec_reg_date_issued %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.boi_no %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.boi_date_issued %}
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-5 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.dti_no %}
+                                    </div>
+                                    <div class="col-3 mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.dti_date_issued %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.cda_no %}
+                                    </div>
+                                    <div class="col mx-0 px-0 has-validation">
+                                        {% include 'bootstrap5/floating_field.html' with field=form.cda_date_issued %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row pt-2"></div>
+
+                        <div class="row bordered-section">
+                            <div class="col-12">
+                                <p class="business-form-section my-auto fw-bold">To be filled up by processor/assessor</p>
+                            </div>
+                        </div>
+                        <div class="row bordered-section">
+                            <div class="col-12">
+                                <p class="business-form-section my-auto fw-bold">Verification of documents</p>
+                            </div>
+                        </div>
+
+
+                        <div class="row bordered-section">
+                            <div class="container">
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 form-div text-center">
+                                        <div class="container px-0">
+                                            <table class="table table-bordered" id="table_verification_documents">
+                                                <caption>
+                                                    <small>Are you enjoying incentive from any Government Entity</small>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                    <label class="form-check-label" for="inlineRadio1">1</label>
+                                                  </div>
+                                                  <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                    <label class="form-check-label" for="inlineRadio2">2</label>
+                                                  </div>
+                                                </caption>
+                                                <thead>
+                                                    <th class="col-4">Description</th>
+                                                    <th class="col-2">Office/Agency</th>
+                                                    <th class="col-2">Date issued</th>
+                                                    <th class="col-4">Verified by</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-uppercase">Barangay business clearance</td>
+                                                        <td class="text-uppercase">Barangay</td>
+                                                        <td>{{ form.barangay_business_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.barangay_business_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase">Location/Zoning Clearance</td>
+                                                        <td class="text-uppercase">Zoning Admin</td>
+                                                        <td>{{ form.location_zoning_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.location_zoning_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase">Sanitary/Health clearance</td>
+                                                        <td class="text-uppercase">Health Department</td>
+                                                        <td>{{ form.health_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.health_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase">Occupancy Permit/Annual inspection clearance</td>
+                                                        <td class="text-uppercase">Bldg. official</td>
+                                                        <td>{{ form.occupancy_permit_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.occupancy_permit_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase">Fire safety inspection clearance</td>
+                                                        <td class="text-uppercase">Fire Department</td>
+                                                        <td>{{ form.fire_safety_inspection_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.fire_safety_inspection_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase">Police clearance</td>
+                                                        <td class="text-uppercase">Police clearance</td>
+                                                        <td>{{ form.police_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.police_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-uppercase" colspan="2">{% include 'bootstrap5/floating_field.html' with field=form.others_clearance %}</td>
+                                                        <td>{{ form.others_clearance_date|as_crispy_field }}</td>
+                                                        <td>{{ form.others_clearance_verified_by|as_crispy_field }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-3">
                                 <button type="submit" class="btn btn-success">Submit</button>

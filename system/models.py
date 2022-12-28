@@ -20,7 +20,7 @@ class BusinessPermit(models.Model):
         ONE = 2, "One Person Corporation"
         PARTNERSHIP = 3, "Partnership"
         CORPORATION = 4, "Corporation"
-        COOPERATIVE = 5, "Cooperative"
+        COOPERATIVE = 5, "People's Organization"
     class Gender(models.IntegerChoices):
         MALE = 1
         FEMALE = 2
@@ -93,8 +93,8 @@ class BusinessPermit(models.Model):
     pagibig_no = models.CharField(verbose_name="Pag-ibig No.", max_length=12, blank=True)
     email = models.EmailField(verbose_name='Email Address', blank=True)
 
-    employee_no_male = models.PositiveIntegerField(default=0)
-    employee_no_female = models.PositiveIntegerField(default=0)
+    employee_no_male = models.PositiveIntegerField(default=0, null=True, blank=True)
+    employee_no_female = models.PositiveIntegerField(default=0, null=True, blank=True)
 
     code_1 = models.CharField(max_length=20, blank=True)
     code_2 = models.CharField(max_length=20,blank=True)
@@ -121,11 +121,56 @@ class BusinessPermit(models.Model):
     paid_up_3 = models.CharField(max_length=40,blank=True)
     paid_up_4 = models.CharField(max_length=40,blank=True)
 
-    employee_no_male_residing = models.PositiveIntegerField(default=0)
-    employee_no_female_residing = models.PositiveIntegerField(default=0)
+    employee_no_male_residing = models.PositiveIntegerField(default=0, null=True, blank=True)
+    employee_no_female_residing = models.PositiveIntegerField(default=0, null=True, blank=True)
     
-    delivery_trucks_no = models.PositiveIntegerField(verbose_name="Delivery Trucks/Vehicles No. of Units")
+    delivery_trucks_no = models.PositiveIntegerField(verbose_name="Delivery Trucks/Vehicles No. of Units", null=True, blank=True)
     estimated_area = models.CharField(verbose_name="Estimated area used in business", max_length=20, blank=True)
+
+    owner_rented_name = models.CharField(max_length=255, blank=True)
+    owner_rented_address = models.CharField(max_length=255, blank=True)
+    administrator_name = models.CharField(verbose_name="Administrator (If name of owner is not available)", max_length=255, blank=True)
+    rent_start = models.DateField(verbose_name="Rent start(monthly/year)", null=True)
+    rent_per_month = models.PositiveIntegerField(verbose_name="Rent per month", null=True, blank=True)
+
+    dole_reg_no = models.CharField(verbose_name="DOLE reg no.", max_length=30, blank=True)
+    dole_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    location_clearance_no = models.CharField(verbose_name="Location clearance no.", max_length=30, blank=True)
+    location_clearance_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    certificate_of_occupancy_no = models.CharField(verbose_name="Certificate of occupancy no.", max_length=30, blank=True)
+    certificate_of_occupancy_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    sec_reg_no = models.CharField(verbose_name="SEC reg no.", max_length=30, blank=True)
+    sec_reg_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    boi_no = models.CharField(verbose_name="BOI no.", max_length=30, blank=True)
+    boi_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    dti_no = models.CharField(verbose_name="DTI no.", max_length=30, blank=True)
+    dti_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    cda_no = models.CharField(verbose_name="DTI no.", max_length=30, blank=True)
+    cda_date_issued = models.DateField(verbose_name="Date issued", null=True, blank=True)
+
+    barangay_business_clearance_date = models.DateField(null=True, blank=True)
+    location_zoning_clearance_date = models.DateField(null=True, blank=True)
+    health_clearance_date = models.DateField(null=True, blank=True)
+    occupancy_permit_clearance_date = models.DateField(null=True, blank=True)
+    fire_safety_inspection_clearance_date = models.DateField(null=True, blank=True)
+    police_clearance_date = models.DateField(null=True, blank=True)
+    others_clearance_date = models.DateField(null=True, blank=True)
+
+    barangay_business_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    location_zoning_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    health_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    occupancy_permit_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    fire_safety_inspection_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    police_clearance_verified_by = models.CharField(max_length=30, blank=True)
+    others_clearance_verified_by = models.CharField(max_length=30, blank=True)
+
+    others_clearance = models.CharField(verbose_name="Others, please sepecify", max_length=30, blank=True)
 
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,
