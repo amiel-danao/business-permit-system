@@ -1,92 +1,83 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button, Div, Field, HTML
+from crispy_forms.bootstrap import PrependedText
 from crispy_bootstrap5.bootstrap5 import FloatingField
 from system.models import BusinessPermit
+from django.utils.translation import gettext_lazy as _
 
-STATES = (
-    ('', 'Choose...'),
-    ('MG', 'Minas Gerais'),
-    ('SP', 'Sao Paulo'),
-    ('RJ', 'Rio de Janeiro')
-)
+PHONE_NUMBER_ATTRS = {'pattern': '[0][0-9]{10}', 'maxlength': '11'}
 
 class BusinessPermitForm(forms.ModelForm):
-    # business_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Business Name', 'class' : 'form-floating'}))
-    # password = forms.CharField(widget=forms.PasswordInput())
-    # address_1 = forms.CharField(
-    #     label='Address',
-    #     widget=forms.TextInput(attrs={'placeholder': '1234 Main St'})
-    # )
-    # address_2 = forms.CharField(
-    #     widget=forms.TextInput(attrs={'placeholder': 'Apartment, studio, or floor'})
-    # )
-    # city = forms.CharField()
-    # state = forms.ChoiceField(choices=STATES)
-    # zip_code = forms.CharField(label='Zip')
-    # check_me_out = forms.BooleanField(required=False)
+    business_contact_no = forms.CharField(widget=forms.TextInput(attrs=PHONE_NUMBER_ATTRS), label='Contact No.')
+    tax_payer_contact_no = forms.CharField(widget=forms.TextInput(attrs=PHONE_NUMBER_ATTRS), label='Contact No.', required=False)
+    sss_no = forms.RegexField(
+        required=False,
+        label='SSS No.',
+        regex='^(?:\d{3}-\d{2}-\d{3})$',
+        error_messages = {'invalid': _("Please follow the correct SSS No. format ex: AAA-GG-SSSS")})
+    tin_no = forms.RegexField(
+        required=False,
+        label='TIN No.',
+        regex='^(?:\d{3}-\d{3}-\d{3}|\d{3}-\d{3}-\d{3}-\d{3})$',
+        error_messages = {'invalid': _("Please follow the correct TIN No. format ex: xxx-xxx-xxx")})
+
+    community_tax_date_issued = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
+
+    philhealth_no = forms.RegexField(
+        required=False,
+        regex='^(?:\d{2}-\d{9}-\d{1})$',
+        error_messages = {'invalid': _("Please follow the correct Philhealth No. format ex: xx-xxxxxxxxx-x")}, label='Philhealth No.')
+
+    pagibig_no = forms.RegexField(
+        required=False,
+        regex='^(?:\d{12})$',
+        error_messages = {'invalid': _("Please follow the correct Pag-ibig No. format ex: xxxxxxxxxxxx")}, label='Pag-ibig No.')
 
     class Meta:
         model = BusinessPermit
         fields = '__all__'
-        exclude = ('reference_no', )
+        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'business_type')
+        
 
     def __init__(self, *args, **kwargs):
         super(BusinessPermitForm, self).__init__(*args, **kwargs)
-
-        # If you pass FormHelper constructor a form instance
-        # It builds a default layout with all its fields
+        
         self.helper = FormHelper(self)
-        # self.helper["business_name"].wrap(Field, HTML(self.get_label('business_name', self.helper)))
-        self.fields['community_tax_certificate'].label = "Community Tax Certificate(Cedula)"
-        self.helper.layout = Layout(
-            Row(
-                Div(
-                    HTML('<p class="business-form-section my-auto">Requirements</p>'),
-                    css_class='col-12'),
-                css_class='bordered-section'
-            ),
-            Row(
-                Div(
-                    Field("barangay_business_clearance"), 
-                css_class='col-4'),
-                Div(
-                    Field("proof_of_business_name_registration"), 
-                css_class='col-4'),
-                Div(
-                    Field("community_tax_certificate"), 
-                css_class='col-4'),
-                
-                css_class='bordered-section'
-            ),
-            Row(
-                Div(
-                    HTML('<small class="text-center business-form-section my-auto">All other requirements required by law, ordinance and rules are subject to Post Audit Process</small>'),
-                    css_class='col-12 text-center'),
-                css_class='bordered-section'
-            )
-        )
+        
+        self.helper.form_show_errors = True
+        self.helper.error_text_inline = True
+        
+        self.fields['business_name'].label = False
+        self.fields['employee_no_male'].label = False
+        self.fields['employee_no_female'].label = False
+        self.fields['employee_no_male_residing'].label = False
+        self.fields['employee_no_female_residing'].label = False
 
-        # You can dynamically adjust your layout
-        # self.helper.layout.append(Button('next', 'Next Page', css_class='btn btn-success', type='button'))
+        self.fields['code_1'].label = False
+        self.fields['code_2'].label = False
+        self.fields['code_3'].label = False
+        self.fields['code_4'].label = False
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.layout = Layout(
-    #         Row(
-    #             Column('email', css_class='form-group col-md-6 mb-0'),
-    #             Column('password', css_class='form-group col-md-6 mb-0'),
-    #             css_class='form-row'
-    #         ),
-    #         'address_1',
-    #         'address_2',
-    #         Row(
-    #             Column('city', css_class='form-group col-md-6 mb-0'),
-    #             Column('state', css_class='form-group col-md-4 mb-0'),
-    #             Column('zip_code', css_class='form-group col-md-2 mb-0'),
-    #             css_class='form-row'
-    #         ),
-    #         'check_me_out',
-    #         Submit('submit', 'Sign in')
-    #     )
+        self.fields['line_of_business_1'].label = False
+        self.fields['line_of_business_2'].label = False
+        self.fields['line_of_business_3'].label = False
+        self.fields['line_of_business_4'].label = False
+
+        self.fields['receipts_1'].label = False
+        self.fields['receipts_2'].label = False
+        self.fields['receipts_3'].label = False
+        self.fields['receipts_4'].label = False
+
+        self.fields['subscribed_1'].label = False
+        self.fields['subscribed_2'].label = False
+        self.fields['subscribed_3'].label = False
+        self.fields['subscribed_4'].label = False
+
+        self.fields['paid_up_1'].label = False
+        self.fields['paid_up_2'].label = False
+        self.fields['paid_up_3'].label = False
+        self.fields['paid_up_4'].label = False
+        
+        
+        

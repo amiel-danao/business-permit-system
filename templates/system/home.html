@@ -8,8 +8,8 @@
 {% block mycss %}
 {{ block.super }}
 {% bootstrap_css %}
-<link href="{% static 'css/home.css' %}" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
 {% endblock mycss %}
 
 {% block content %}
@@ -18,12 +18,13 @@
     <div class="d-flex align-items-start" >
         <div class="col-3 nav p-5 flex-column nav-pills me-3 sidebar" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <p class="text-white fw-bold">Business Management</p>
-            <a class="nav-link {% if not request.GET.status or request.GET.status == '1'%} active{% endif %}" href="{% url 'system:index'%}?status=1" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
+            <a class="nav-link {% if request.path != '/permit/create/'%}{% if not request.GET.status or request.GET.status == '1'%} active{% endif %}{% endif %}" href="{% url 'system:index'%}?status=1" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
             <a class="nav-link {% if request.GET.status == '2'%} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a>
             <a class="nav-link {% if request.GET.status == '5'%} active{% endif %}" href="{% url 'system:index'%}?status=5" id="v-pills-disabled-tab" type="button"  aria-selected="false">My Businesses</a>
-            <a class="nav-link {% if request.GET.status == '-1'%} active{% endif %}" href="{% url 'system:index'%}?status=-1" id="v-pills-messages-tab" type="button" role="tab" aria-selected="false">New Application</a>
+            <a class="nav-link {% if request.path == '/permit/create/'%} active{% endif %}" href="{% url 'system:create'%}" id="v-pills-messages-tab" type="button" role="tab" aria-selected="false">New Application</a>
         </div>
-        <div class="col-9 tab-content" id="v-pills-tabContent">
+        <div class="col tab-content shadow " id="v-pills-tabContent">
+            {% if table %}
             <div class="p-5 tab-pane fade {% if not request.GET.status or request.GET.status != '-1'%} show active{% endif %}" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
             
             {% if filter %}
@@ -34,34 +35,333 @@
             {% endif %}
             {% render_table table %}
             </div>
+            {% endif %}
 
-
-            <div class="tab-pane fade {% if request.GET.status == '-1'%} show active{% endif %}" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+            {% if form %}
+            <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
                 <div class="container p-2">
-                    <div class="row align-items-end g-0">
-                        <div class="col-3 px-0 mx-0">
-                            {% include 'bootstrap5/floating_field.html' with field=form.transaction_type %}
-                        </div>
-                        <div class="col-6 text-center px-0 mx-0">
-                            <img src="{% static 'img/logo.png' %}" class="form-logo">
-                            <p class="px-0 my-auto">Republic of the Philippines</p>
-                            <p class="px-0 my-auto">The Municipal Government of Dulag, Leyte</p>
-                            <p class="px-0 h5 text-center text-uppercase fw-bolder my-auto">Unified Application Form for Business Permit</p>
-                        </div>
-                        <div class="col-3 px-2 mx-0 text-center">
-                            <p class="py-0 my-0 underlined">{% now 'Y-m-d' %}</p>
-                            <small class="align-top">Date</small>
-                            <p class="py-0 my-0 underlined"><br></p>
-                            <small class="align-top">Form Control No.</small>
-                            <p class="py-0 my-0 underlined"><br></p>
-                            <small class="align-top">Mayor's Business Permit No.</small>
-                        </div>
+                    {% for error in form.non_field_errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
                     </div>
+                    {% endfor %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row align-items-end g-0">
+                            <div class="col-3 px-0 mx-0">
+                                {% include 'bootstrap5/floating_field.html' with field=form.transaction_type %}
+                            </div>
+                            <div class="col-6 text-center px-0 mx-0">
+                                <img src="{% static 'img/logo.png' %}" class="form-logo">
+                                <p class="px-0 my-auto">Republic of the Philippines</p>
+                                <p class="px-0 my-auto">The Municipal Government of Dulag, Leyte</p>
+                                <p class="px-0 h5 text-center text-uppercase fw-bolder my-auto">Unified Application Form for Business Permit</p>
+                            </div>
+                            <div class="col-3 px-2 mx-0 text-center">
+                                <p class="py-0 my-0 underlined">{% now 'Y-m-d' %}</p>
+                                <small class="align-top">Date</small>
+                                <p class="py-0 my-0 underlined"><br></p>
+                                <small class="align-top">Form Control No.</small>
+                                <p class="py-0 my-0 underlined"><br></p>
+                                <small class="align-top">Mayor's Business Permit No.</small>
+                            </div>
+                        </div>
 
-                    {% crispy form %}
+
+                        <div class="row bordered-section">
+                            <div class="col-12">
+                                <p class="business-form-section my-auto fw-bold">Requirements</p>
+                            </div>
+                        </div>
+                        <div class="row bordered-section">
+                            <div class="col-4">
+                                {{ form.barangay_business_clearance|as_crispy_field}}
+                            </div>
+                            <div class="col-4">
+                                {{ form.proof_of_business_name_registration|as_crispy_field}}
+                            </div>
+                            <div class="col-4">
+                                {{ form.community_tax_certificate|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row bordered-section">
+                            <div class="col-12 text-center">
+                                <small class="text-center business-form-section my-auto">All other requirements required by law, ordinance and rules are subject to Post Audit Process</small>
+                            </div>
+                        </div>
+                        <div class="row pt-2"></div>
+                        <div class="row bordered-section">
+                            <div class="container">
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Business Trade Name*</span>
+                                            <div class="col-7 mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.business_name %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.business_contact_no %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Business Address</span>
+                                            <div class="col-3 mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.business_house_no %}
+                                            </div>
+                                            <div class="col-4 mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.business_street %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.business_barangay %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Name of Tax Payer</span>
+                                            <div class="col-3 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_surname %}
+                                            </div>
+                                            <div class="col-2 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_firstname %}
+                                            </div>
+                                            <div class="col-2 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_middle_name %}
+                                            </div>
+                                            <div class="col mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_contact_no %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text">Address of TaxPayer</span>
+                                            <div class="col-3 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_house_no %}
+                                            </div>
+                                            <div class="col-2 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_street %}
+                                            </div>
+                                            <div class="col-2 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_barangay %}
+                                            </div>
+                                            <div class="col mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tax_payer_city %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <div class="col-7 mx-0 px-0mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.treasury_name %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.sss_no %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.tin_no %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <div class="col-7 mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.community_tax_certificate_no %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                
+                                                {% include 'bootstrap5/floating_field.html' with field=form.community_tax_date_issued %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.community_tax_place_issued %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <div class="col-12 mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.transfer_of_ownership_name %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 mx-0 px-0">
+                                        <div class="input-group has-validation">
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.philhealth_no %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                
+                                                {% include 'bootstrap5/floating_field.html' with field=form.pagibig_no %}
+                                            </div>
+                                            <div class="col mx-0 px-0">
+                                                {% include 'bootstrap5/floating_field.html' with field=form.email %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="row pt-2"></div>
+
+                        <div class="row bordered-section">
+                            <div class="container">
+                                <div class="row g-0 my-0 py-0">
+                                    <div class="col-12 form-div text-center">
+                                        <div class="container px-0">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    
+                                                  </thead>
+                                                  <tbody>
+                                                    <tr>
+                                                        <td class="align-middle column-label col-1" scope="row" rowspan="2">Code</td>
+                                                        <td class="align-middle column-label col-2" scope="row" rowspan="2">Line of Business/Activities</td>
+                                                        <td class="align-middle column-label col-3" scope="row" rowspan="2">Capitalization/Gross Sales/Receipts</td>
+                                                        <td class="align-middle column-label col-2" colspan="2">Capital Investment</td>
+                                                        <td class="align-middle column-label col-2" scope="row" rowspan="4">Total No. of employees/workers</td>
+                                                        <td class="align-middle column-label col-1">M</td>
+                                                        <td class="align-middle column-label col-1">F</td>
+                                                      </tr>
+                                                    <tr>
+                                                      <td class="align-middle column-label" scope="col">Subscribed</td>
+                                                      <td class="align-middle column-label" scope="col">Paid-up</td>
+                                                      
+                                                      <td class="form-table-input" scope="row" rowspan="3">
+                                                        {% include 'bootstrap5/floating_field.html' with field=form.employee_no_male %}
+                                                      </td>
+                                                      <td class="form-table-input" scope="row" rowspan="3">
+                                                        {% include 'bootstrap5/floating_field.html' with field=form.employee_no_female %}
+                                                      </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="form-table-input">
+                                                            {{ form.code_1|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.line_of_business_1|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.receipts_1|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.subscribed_1|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.paid_up_1|as_crispy_field }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="form-table-input">
+                                                            {{ form.code_2|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.line_of_business_2|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.receipts_2|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.subscribed_2|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.paid_up_2|as_crispy_field }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="form-table-input">
+                                                            {{ form.code_3|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.line_of_business_3|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.receipts_3|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.subscribed_3|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.paid_up_3|as_crispy_field }}
+                                                        </td>
+                                                        <td class="align-middle column-label" scope="row" rowspan=4">Total No. of employees residing in the municipality</td>
+                                                        <td class="align-middle column-label" scope="col">M</td>
+                                                        <td class="align-middle column-label" scope="col">F</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="form-table-input">
+                                                            {{ form.code_4|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.line_of_business_4|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.receipts_4|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.subscribed_4|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input">
+                                                            {{ form.paid_up_4|as_crispy_field }}
+                                                        </td>
+                                                        <td class="form-table-input" scope="row" rowspan="3">
+                                                            {% include 'bootstrap5/floating_field.html' with field=form.employee_no_male_residing %}
+                                                        </td>
+                                                        <td class="form-table-input" scope="row" rowspan="3">
+                                                            {% include 'bootstrap5/floating_field.html' with field=form.employee_no_female_residing %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="form-table-input" colspan="2" rowspan="2">
+                                                            {% include 'bootstrap5/floating_field.html' with field=form.delivery_trucks_no %}
+                                                        </td>
+                                                        <td class="form-table-input" colspan="3" rowspan="2">
+                                                            {% include 'bootstrap5/floating_field.html' with field=form.estimated_area %}
+                                                        </td>
+                                                    </tr>
+                                                    </tbody> 
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pt-2"></div>
+
+                        <div class="row">
+                            <div class="col-3">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
+            {% endif %}
 
         </div>
     </div>

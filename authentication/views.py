@@ -11,7 +11,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Registration successful.")
+            # messages.success(request, "Registration successful.")
             form = RegisterForm()
             return redirect('system:index')
         else:
