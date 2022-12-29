@@ -172,6 +172,8 @@ class BusinessPermit(models.Model):
 
     others_clearance = models.CharField(verbose_name="Others, please sepecify", max_length=30, blank=True)
 
+    government_entity = models.BooleanField(default=False)
+
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,
         default=Gender.MALE

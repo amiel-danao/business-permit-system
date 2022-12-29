@@ -133,13 +133,15 @@ table tr .column-label{
 
 /* Chrome, Safari, Edge, Opera */
 .form-table-input input::-webkit-outer-spin-button,
-.form-table-input input::-webkit-inner-spin-button {
+.form-table-input input::-webkit-inner-spin-button,
+.no-arrow-input{
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-.form-table-input input[type=number] {
+.form-table-input input[type=number],
+.no-arrow-input {
   -moz-appearance: textfield;
 }
 
@@ -149,4 +151,16 @@ table tr .column-label{
 
 #table_verification_documents td div{
     margin: 0px !important;
+}
+
+.underlined-input{
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    outline:none;
+    box-shadow:none;
+}
+
+.agreement-text{
+    font-size: 0.8rem;
 }
