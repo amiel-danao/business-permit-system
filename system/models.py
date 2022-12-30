@@ -127,9 +127,9 @@ class BusinessPermit(models.Model):
     delivery_trucks_no = models.PositiveIntegerField(verbose_name="Delivery Trucks/Vehicles No. of Units", null=True, blank=True)
     estimated_area = models.CharField(verbose_name="Estimated area used in business", max_length=20, blank=True)
 
-    owner_rented_name = models.CharField(max_length=255, blank=True)
-    owner_rented_address = models.CharField(max_length=255, blank=True)
-    administrator_name = models.CharField(verbose_name="Administrator (If name of owner is not available)", max_length=255, blank=True)
+    owner_rented_name = models.CharField(max_length=50, blank=True)
+    owner_rented_address = models.CharField(max_length=50, blank=True)
+    administrator_name = models.CharField(verbose_name="Administrator (If name of owner is not available)", max_length=50, blank=True)
     rent_start = models.DateField(verbose_name="Rent start(monthly/year)", null=True)
     rent_per_month = models.PositiveIntegerField(verbose_name="Rent per month", null=True, blank=True)
 
@@ -173,6 +173,88 @@ class BusinessPermit(models.Model):
     others_clearance = models.CharField(verbose_name="Others, please sepecify", max_length=30, blank=True)
 
     government_entity = models.BooleanField(default=False)
+
+    business_applicant_name = models.CharField(max_length=50, blank=False, default='')
+    business_applicant_day = models.CharField(max_length=20, blank=False, default='1')
+    business_applicant_year = models.CharField(max_length=10, blank=False, default='1')
+    applicant_picture = models.ImageField(upload_to='applicants/', blank=True, null=True, max_length=100)
+
+    owners_name = models.CharField(max_length=50, blank=False, default='')
+    fire_safety_date = models.DateField(null=True)
+    floor_area = models.CharField(max_length=50, blank=False, default='')
+    contact_no = models.CharField(max_length=11, blank=True)
+
+    address = models.CharField(max_length=80, blank=False, default='')
+    certified_by = models.CharField(max_length=50, blank=False, default='')
+    customer_relation_officer = models.CharField(max_length=50, blank=False, default='')
+    time_date_received = models.DateField(null=True)
+    fire_inspection_fee = models.PositiveIntegerField(default=0)
+
+    activities_main1 = models.CharField(default='', blank=True, max_length=100)
+    activities_main2 = models.CharField(default='', blank=True, max_length=100)
+    activities_main3 = models.CharField(default='', blank=True, max_length=100)
+    activities_main4 = models.CharField(default='', blank=True, max_length=100)
+
+    activities_others1 = models.CharField(default='', blank=True, max_length=100)
+    activities_others2 = models.CharField(default='', blank=True, max_length=100)
+    activities_others3 = models.CharField(default='', blank=True, max_length=100)
+    activities_others4 = models.CharField(default='', blank=True, max_length=100)
+    
+    taxable_items1 = models.CharField(default='', blank=True, max_length=100)
+    taxable_items2 = models.CharField(default='', blank=True, max_length=100)
+    taxable_items3 = models.CharField(default='', blank=True, max_length=100)
+    taxable_items4 = models.CharField(default='', blank=True, max_length=100)
+
+    no_of_units1 = models.PositiveIntegerField(default=0, blank=True)
+    no_of_units2 = models.PositiveIntegerField(default=0, blank=True)
+    no_of_units3 = models.PositiveIntegerField(default=0, blank=True)
+    no_of_units4 = models.PositiveIntegerField(default=0, blank=True)
+
+    others_taxable_items1 = models.CharField(default='', blank=True, max_length=100)
+    others_taxable_items2 = models.CharField(default='', blank=True, max_length=100)
+    others_taxable_items3 = models.CharField(default='', blank=True, max_length=100)
+    others_taxable_items4 = models.CharField(default='', blank=True, max_length=100)
+
+    others_no_of_units1 = models.PositiveIntegerField(default=0, blank=True)
+    others_no_of_units2 = models.PositiveIntegerField(default=0, blank=True)
+    others_no_of_units3 = models.PositiveIntegerField(default=0, blank=True)
+    others_no_of_units4 = models.PositiveIntegerField(default=0, blank=True)
+
+    no_of_employees = models.PositiveIntegerField(default=0, blank=True)
+    area_used = models.CharField(max_length=20, blank=True)
+
+    single_faced = models.CharField(max_length=20, default='', blank=True)
+    no_of_tables = models.PositiveIntegerField(default=0, blank=True)
+    double_faced = models.CharField(max_length=20, default='', blank=True)
+    no_of_chairs = models.PositiveIntegerField(default=0, blank=True)
+
+    space_lot_rental = models.PositiveIntegerField(default=0, blank=True)
+    seating_capacity = models.PositiveIntegerField(default=0, blank=True)
+
+    weight_of_45kgs_peddling = models.CharField(max_length=30, default='0', blank=True)
+    weight_of_45kgs_delivery = models.CharField(max_length=30, default='0', blank=True)
+    no_of_beds = models.PositiveIntegerField(default=0, blank=True)
+
+    weight_of_below_45kgs_peddling = models.CharField(max_length=30, default='0', blank=True)
+    weight_of_below_45kgs_delivery = models.CharField(max_length=30, default='0', blank=True)
+    no_of_boarders = models.PositiveIntegerField(default=0, blank=True)
+
+    motorized_tricycle_peddling = models.CharField(max_length=30, default='0', blank=True)
+    motorized_tricycle_delivery = models.CharField(max_length=30, default='0', blank=True)
+    estimated_capitalization = models.PositiveIntegerField(default=0, blank=True)
+
+    motorized_peddling = models.CharField(max_length=30, default='0', blank=True)
+    motorized_delivery = models.CharField(max_length=30, default='0', blank=True)
+
+    others_peddling = models.CharField(max_length=30, default='0', blank=True)
+    others_delivery = models.CharField(max_length=30, default='0', blank=True)
+
+    pedicabs_peddling = models.CharField(max_length=30, default='0', blank=True)
+    pedicabs_delivery = models.CharField(max_length=30, default='0', blank=True)
+
+    bplo_inspector = models.CharField(max_length=50, default='', blank=False)
+
+    inspection_date = models.DateField(auto_now=True)
 
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,

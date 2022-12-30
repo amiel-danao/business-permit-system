@@ -95,7 +95,7 @@ if os.environ.get("DJANGO_ENV") == "LOCAL":
             "HOST": "localhost",
             "PORT": "3306",
             'OPTIONS': {
-                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'; SET storage_engine=MYISAM;",
             }
         }
     }
@@ -109,7 +109,7 @@ else:
             "HOST": "bpls.mysql.pythonanywhere-services.com",
             "PORT": "3306",
             'OPTIONS': {
-                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'; SET storage_engine=MYISAM;",
             }
         }
     }

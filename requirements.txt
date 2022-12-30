@@ -10,6 +10,7 @@ django-flatpickr==2.0.0
 django-tables2==2.4.1
 mysqlclient==2.1.1
 phonenumberslite==8.13.2
+Pillow==9.3.0
 pydantic==1.10.2
 soupsieve==2.3.2.post1
 sqlparse==0.4.3

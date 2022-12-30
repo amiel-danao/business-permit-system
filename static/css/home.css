@@ -76,11 +76,20 @@ td{
     border-bottom: black solid 1px;
 }
 
-form label{
+#page1Div label, #page2Div label, #page2Div .input-group-text{
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.7rem !important;
     color:black;
-    opacity: 0.5;
+    /* opacity: 0.5; */
+}
+
+#page2Div .input-group-text, .activities-label, input{
+    font-size: 0.7rem !important;
+}
+
+#page2Div label{
+    padding-right: 0px !important;
+    margin-right:  0px !important;
 }
 
 form .input-group-text{
@@ -164,3 +173,28 @@ table tr .column-label{
 .agreement-text{
     font-size: 0.8rem;
 }
+
+#applicant_image_thumbnail{
+    opacity: 1;
+}
+
+
+#toTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    left: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: red; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+  }
+  
+  #toTopBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+  }

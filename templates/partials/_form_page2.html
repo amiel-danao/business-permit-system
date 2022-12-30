@@ -1,0 +1,458 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% load bootstrap4 %}
+
+<div id="page2Div">
+    <h4 class="my-5">Page 2</h4>
+    <p class="fw-bold text-uppercase text-center">Bureau of fire station section(Application for Fire Safety inspection certificate)</p>
+    <div class="row bordered-section">
+        <div class="container">
+            <div class="row mb-2">
+                <label for="tracking_no" class="col-2 col-form-label">Tracking No.</label>
+                <div class="col-4">
+                    <input class="form-control underlined-input" type="text" name="tracking_no" id="tracking_no">
+                </div>
+                <label for="fire_safety_date" class="col-1 offset-1 col-form-label">Date:</label>
+                <div class="col-4">
+                    <input class="form-control underlined-input" type="date" name="fire_safety_date" id="fire_safety_date">
+                </div>
+            </div>
+            <div class="row">
+                <p class="mb-3 text-uppercase">(To be filled out by the Applicant/Owner)</p>
+                <label for="name_of_business" class="col-3 col-form-label">Name of business:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="text" name="name_of_business" id="name_of_business">
+                </div>
+            </div>
+            <div class="row">
+                <label for="floor_area" class="col-3 col-form-label">Total Floor Area:</label>
+                <div class="col-4">
+                    <input class="form-control underlined-input" type="text" name="floor_area" id="floor_area">
+                </div>
+                <label for="contact_no" class="col col-form-label">Contact No.</label>
+                <div class="col">
+                    <input class="form-control underlined-input" type="text" pattern="[0][0-9]{10}" name="contact_no" maxlength="11"  id="contact_no">
+                </div>
+                
+            </div>
+            <div class="row">
+                <label for="address" class="col-4 col-form-label">Address of Establishment:</label>
+                <div class="col-8">
+                    <input class="form-control underlined-input" type="text" name="address" id="address">
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-6">
+                    <p class="py-0 my-0 underlined"></p>
+                    <small class="align-top text-uppercase agreement-text">Signature of Applicant/Owner</small>
+                </div>
+            </div>
+            <div class="row">
+                <label for="certified_by" class="col-3 col-form-label">Certified By:</label>
+                <div class="col-4">
+                    <input class="form-control underlined-input" type="text" name="certified_by" id="certified_by">
+                </div>
+            </div>
+            <div class="row">
+                <label for="customer_relation_officer" class="col-2 col-form-label">Customer Relation Officer:</label>
+                <div class="col-2">
+                    <input class="form-control underlined-input" type="text" name="customer_relation_officer" id="customer_relation_officer">
+                </div>
+                <label for="time_date_received" class="col-2 col-form-label">Time and Date Received:</label>
+                <div class="col-2">
+                    <input class="form-control underlined-input" type="date" name="time_date_received" id="time_date_received">
+                </div>
+
+                <div class="col">
+                    <label class="visually-hidden" for="fire_inspection_fee"></label>
+                    <div class="input-group mb-3 h-100">
+                        <small class="input-group-text col-5">Fire inspection fee assessment:</small>
+                        <input type="number" class="form-control h-100" name="fire_inspection_fee" id="fire_inspection_fee" placeholder="0.00">
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <p class="activities-label">Important Notice: As per Section 12 of the implementing Rules and Regulations of the Fire Code of 2018, certain establishment (e.g building lessers, fire, earthquake, and explosion hazard insurance companies and vendors of firefighting equipment, appliance and devices) may be required to pay addittional charges and fees other than the Fire Safety Inspection Fees. Theses shall be collected during inspections or in another process to be communicated by representatives of the Bureau of Fire Protection (BFP).</p>
+
+    
+    <div class="row bordered-section" style="min-height:70vh;">
+        <label for="sketch_image">
+            <h4>Map Sketch</h4>
+        
+            <div class="col-12">
+                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here">
+            </div>
+        </label>
+        <input type="file" name="sketch_image" class="form-control d-none" id="sketch_image" accept="image/jpeg, image/png, image/jpg"/>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <p>Inspection Report:</p>
+        <div class="col-3">
+            <p>Business Activities</p>
+        </div>
+        <div class="col-2 offset-5"><p>Taxable Items</p></div>
+        <div class="col-2">No. of Units</div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-3 text-right">
+            <p>Main</p>
+        </div>
+        <div class="col-4"><input class="underlined-input w-100" name="activities_main1"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items1"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units1"/></div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main2"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items2"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units2"/></div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main3"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items3"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units3"/></div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main4"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items4"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units4"/></div>
+    </div>
+
+    <!-- Others -->
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-3 text-right">
+            <p>Others</p>
+        </div>
+        <div class="col-4"><input class="underlined-input w-100" name="activities_others1"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items1"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units1"/></div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others2"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items2"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units2"/></div>
+    </div>
+
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others3"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items3"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units3"/></div>
+    </div>
+    
+    <div class="row text-uppercase activities-label">
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others4"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items4"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units4"/></div>
+    </div>
+
+    <div class="row mt-2">
+        <label for="no_of_employees" class="col-3 col-form-label text-capitalize">No. of Employees</label>
+        <div class="col-3">
+            <input class="form-control underlined-input" type="number" min="0" name="no_of_employees" id="no_of_employees">
+        </div>
+        <label for="area_used" class="col-3 col-form-label text-capitalize">Area used in business(in sq.m.)</label>
+        <div class="col-3">
+            <input class="form-control underlined-input" type="text" name="area_used" id="area_used">
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-6">
+            <div class="row">
+                <p class="mb-0 activities-label">Signboard(in sq.m)</p>
+                <label for="single_faced" class="col-3 offset-2 col-form-label text-capitalize">Single Faced:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="text" name="single_faced" id="single_faced">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="row">
+                <p class="mb-0 activities-label">For Eatery Establishment:</p>
+                <label for="no_of_tables" class="col-5 offset-2 col-form-label text-capitalize">No. of Tables:</label>
+                <div class="col-5">
+                    <input class="form-control underlined-input" min=0 type="number" name="no_of_tables" id="no_of_tables">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <label for="double_faced" class="col-3 offset-2 col-form-label text-capitalize">Double Faced:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="text" name="double_faced" id="double_faced">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="row">
+                <label for="no_of_chairs" class="col-5 offset-2 col-form-label text-capitalize">No. of Chairs:</label>
+                <div class="col-5">
+                    <input class="form-control underlined-input" min=0 type="number" name="no_of_chairs" id="no_of_chairs">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <label for="space_lot_rental" class="col-3 offset-2 col-form-label text-capitalize">Bldg. Space/Lot Rental: ₱</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="number" min="0" name="space_lot_rental" id="space_lot_rental">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="row">
+                <label for="seating_capacity" class="col-5 offset-2 col-form-label text-capitalize">Total Seating Capacity:</label>
+                <div class="col-5">
+                    <input class="form-control underlined-input" min=0 type="number" name="seating_capacity" id="seating_capacity">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row activities-label">
+        <p>Vehicle used in Business:</p>
+        <div class="col-3">
+            <p>Gross Weight of:</p>
+        </div>
+
+        <div class="col-3">
+            <p class="text-underlined">Peddling</p>
+        </div>
+
+        <div class="col-3">
+            <p class="text-underlined">Delivery</p>
+        </div>
+
+        <div class="col-3">
+            <p>For Boarding House</p>
+            <div class="row">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>4,500 kgs or more</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="weight_of_45kgs_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="weight_of_45kgs_delivery"/>
+        </div>
+
+        <div class="col-5">
+            <div class="row">
+                <label for="no_of_beds" class="col-4 offset-2 col-form-label">No. of Beds:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="number" min="0" name="no_of_beds" id="no_of_beds">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>Below 4,500 kgs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="weight_of_below_45kgs_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="weight_of_below_45kgs_delivery"/>
+        </div>
+
+        <div class="col-5">
+            <div class="row">
+                <label for="no_of_boarders" class="col-4 offset-2 col-form-label">Total No. of Boarders:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="number" min="0" name="no_of_boarders" id="no_of_boarders">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>Motorized Tricycle</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="motorized_tricycle_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="motorized_tricycle_delivery"/>
+        </div>
+
+        <div class="col-5">
+            <div class="row">
+                <label for="estimated_capitalization" class="col-4 offset-2 col-form-label">Estimated Capitalization:</label>
+                <div class="col-6 input-group">
+                    <span class="input-group-text">₱</span>
+                    <input class="form-control h-100" type="number" min="0" name="estimated_capitalization" id="estimated_capitalization">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>Motorized</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="motorized_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="motorized_delivery"/>
+        </div>
+    </div>
+
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>Others: Carretelas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="others_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="others_delivery"/>
+        </div>
+    </div>
+
+    <div class="row mt-2 activities-label">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-8 offset-4">
+                    <p>Pedicabs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="pedicabs_peddling"/>
+        </div>
+
+        <div class="col-2">
+            <input class="form-control underlined-input" name="pedicabs_delivery"/>
+        </div>
+    </div>
+
+    <div class="row mt-5 activities-label">
+        <div class="col-3">
+            <p>Inspection conducted by:</p>
+        </div>
+
+        <div class="col-4">
+            <input class="underlined-input py-0 my-0 w-100" name="bplo_inspector" required>
+        </div>
+    </div>
+
+    <div class="row activities-label">
+        <div class="col-4 offset-3 text-center">
+            <div class="w-100"><small class="align-top text-capitalize agreement-text">BPLO Inspector</small></div>
+        </div>
+    </div>
+    
+    <div class="row activities-label">
+        <div class="col-5">
+            <div class="row">
+                <label for="inspection_date" class="col-4 col-form-label">Date of Inspection:</label>
+                <div class="col-8">
+                    <input class="form-control underlined-input" type="date" name="inspection_date" id="inspection_date">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-5 offset-2">
+            <div class="row">
+                <label for="conforme" class="col-4 col-form-label">Conforme:</label>
+                <!-- <div class="col-8">
+                    <p class="py-0 my-0 underlined"></p>
+                    <small class="align-top text-uppercase agreement-text">Signature over Printed Name</small>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row activities-label">
+        <div class="col-5 offset-7">
+            <div class="row">
+                <div class="col-8 offset-4 text-center">
+                    <p class="py-0 my-0 underlined"></p>
+                    <small class="align-top text-uppercase agreement-text">Signature over Printed Name</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row activities-label text-center">
+        <p>Oath Undertaking</p>
+        <p>I understand to comply with the regulatory requirement and deficiencies within 30 days from release of the business permit.</p>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6 offset-3 text-center">
+            <p class="py-0 my-0 underlined"></p>
+            <small class="align-top text-uppercase agreement-text">Signature of Applicant over Printed Name</small>
+        </div>
+    </div>
+
+    <div class="row mt-5 activities-label">
+        <div class="col text-left">
+            <p>For Inquiries, Please contact: BPLO at <u>094262552741</u></p>
+        </div>
+    </div>
+</div>
