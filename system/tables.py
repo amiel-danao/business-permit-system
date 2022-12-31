@@ -10,4 +10,5 @@ class BusinessPermitTable(tables.Table):
         fields = ("business_name", "transaction_type", "transaction_date",
                   "reference_no", "status")
         empty_text = _("No applications found")
-        attrs = {'class': 'table table-hover shadow'}
+        attrs = {'class': 'table table-hover shadow records-table'}
+        row_attrs = {'data-href': lambda record: record.get_absolute_url}

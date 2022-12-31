@@ -30,10 +30,33 @@
             <div class="p-5 tab-pane fade {% if not request.GET.status or request.GET.status != '-1'%} show active{% endif %}" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
             
             {% if filter %}
-                <form action="" method="get" class="form form-inline">
-                    {% bootstrap_form filter.form layout='inline' %}
-                    {% bootstrap_button 'filter' %}
-                </form>
+                <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Search <i class="bi bi-search"></i>
+                  </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="" method="get" class="form form-inline mb-2">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Search</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                        {% bootstrap_form filter.form layout='inline' %}
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Search <i class="bi bi-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+
+                
             {% endif %}
             {% render_table table %}
             </div>
@@ -42,23 +65,29 @@
             {% if form %}
             <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
                 <div class="container p-2">
-                    {% for error in form.non_field_errors%}
+                    {% if messages %}
                     <div class="alert alert-danger" role="alert">
-                        {{ error }}
+                        Please correct the following fields:
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li class="error_field_shortcut" data-target="{% if message.extra_tags %}{{ message.extra_tags }}{% endif %}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    {% endfor %}
+                    {% endif %}
+                    
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
                     {% include 'partials/_form_page1.html' %}
 
                     {% include 'partials/_form_page2.html' %}
-                    
-                        <div class="row" id="page2Buttons">
-                            <div class="col-3">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
+                
+                    <div class="row" id="page2Buttons">
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
+                    </div>
                     </form>
                 </div>
             </div>
@@ -69,6 +98,16 @@
 </div>
 
     <button onclick="topFunction()" id="toTopBtn" title="Go to top"><i class="bi bi-chevron-double-up"></i></button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $(".records-table tr").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 
     <script type="text/javascript">
         // Get the button:
@@ -96,40 +135,55 @@
         const image_file_input = document.querySelector("#applicant_picture");
         const applicant_image = document.querySelector("#applicant_image_thumbnail");
 
-        image_file_input.addEventListener("change", function() {
+        if (image_file_input != undefined){
+            applicant_image.src = applicant_picture.value;
+            image_file_input.addEventListener("change", function() {
 
-            const reader = new FileReader();
+                const reader = new FileReader();
 
-            reader.addEventListener("load", () => {
-                applicant_image.src = reader.result;
-                applicant_image.parentNode.parentNode.parentNode.classList.remove("placeholder-glow");
-                applicant_image.parentNode.parentNode.classList.remove("bg-dark");
-                applicant_image.parentNode.parentNode.classList.remove("placeholder");
+                reader.addEventListener("load", () => {
+                    applicant_image.src = reader.result;
+                    applicant_image.parentNode.parentNode.parentNode.classList.remove("placeholder-glow");
+                    applicant_image.parentNode.parentNode.classList.remove("bg-dark");
+                    applicant_image.parentNode.parentNode.classList.remove("placeholder");
+                });
+
+                reader.readAsDataURL(this.files[0]);
             });
-
-            reader.readAsDataURL(this.files[0]);
-        });
+        }
     
 
         const sketch_file_input = document.querySelector("#sketch_image");
         const sketch_image = document.querySelector("#sketch_picture");
 
-        sketch_file_input.addEventListener("change", function() {
+        if (sketch_file_input != undefined){
+            sketch_image.src = applicant_picture.value;
+            sketch_file_input.addEventListener("change", function() {
 
-            const reader = new FileReader();
+                const reader = new FileReader();
 
-            reader.addEventListener("load", () => {
-                sketch_image.src = reader.result;
-                // sketch_image.parentNode.parentNode.parentNode.classList.remove("placeholder-glow");
-                // sketch_image.parentNode.parentNode.classList.remove("bg-dark");
-                // sketch_image.parentNode.classList.remove("placeholder");
+                reader.addEventListener("load", () => {
+                    sketch_image.src = reader.result;
+                    // sketch_image.parentNode.parentNode.parentNode.classList.remove("placeholder-glow");
+                    // sketch_image.parentNode.parentNode.classList.remove("bg-dark");
+                    // sketch_image.parentNode.classList.remove("placeholder");
+                });
+
+                reader.readAsDataURL(this.files[0]);
             });
-
-            reader.readAsDataURL(this.files[0]);
-        });
+        }
     </script>
     
-
+    <script type="text/javascript">
+        $('.error_field_shortcut').click(function (evt){
+            let target_input = $(this).data('target');
+            console.log(target_input);
+            $(`input[name="${target_input}"]`).focus();
+            // $('input#geo_title').removeAttr('value');
+            // $("input#geo_title").focus();
+            evt.preventDefault();
+        }); 
+    </script>
 {% endblock %}
 
 

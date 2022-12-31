@@ -1,6 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from authentication.models import CustomUser
 import random
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 GENDER = ('Male', 'Female')
 
@@ -14,13 +16,40 @@ def generate_ref_no() -> str:
         existing_object = BusinessPermit.objects.filter(reference_no=uid).first()
     return f'REF-{uid}'
 
+def generate_bfp_no() -> str:
+    # BFP-114835273796
+    uid = None
+    existing_object = BusinessPermit.objects.all().first()
+    while existing_object is not None or uid is None:
+        uid = random.sample(range(1, 999999999999), 1)
+        uid = str(uid[0]).zfill(9)
+        existing_object = BusinessPermit.objects.filter(bfp_tracking_no=uid).first()
+    return f'BFP-{uid}'
+
+def generate_form_control_no() -> str:
+    # FRM-114835273796
+    uid = None
+    existing_object = BusinessPermit.objects.all().first()
+    while existing_object is not None or uid is None:
+        uid = random.sample(range(1, 999999999999), 1)
+        uid = str(uid[0]).zfill(9)
+        existing_object = BusinessPermit.objects.filter(form_control_no=uid).first()
+    return f'FRM-{uid}'
+    
+
+class BusinessType(models.IntegerChoices):
+    SOLE = 1, "Sole Proprietorship"
+    ONE = 2, "One Person Corporation"
+    PARTNERSHIP = 3, "Partnership"
+    CORPORATION = 4, "Corporation"
+    COOPERATIVE = 5, "People's Organization"
+
+class YesNoChoice(models.IntegerChoices):
+    YES = 1, "Yes"
+    NO = 0, "No"
+
 class BusinessPermit(models.Model):
-    class BusinessType(models.IntegerChoices):
-        SOLE = 1, "Sole Proprietorship"
-        ONE = 2, "One Person Corporation"
-        PARTNERSHIP = 3, "Partnership"
-        CORPORATION = 4, "Corporation"
-        COOPERATIVE = 5, "People's Organization"
+    
     class Gender(models.IntegerChoices):
         MALE = 1
         FEMALE = 2
@@ -41,6 +70,7 @@ class BusinessPermit(models.Model):
 
     business_name = models.CharField(blank=False, max_length=50, default='', unique=True)
     reference_no = models.CharField(blank=False, max_length=13, unique=True, default=generate_ref_no)
+    form_control_no = models.CharField(blank=False, max_length=26, unique=True, default=generate_form_control_no)
 
     business_type = models.PositiveSmallIntegerField(
         choices=BusinessType.choices,
@@ -176,19 +206,23 @@ class BusinessPermit(models.Model):
 
     business_applicant_name = models.CharField(max_length=50, blank=False, default='')
     business_applicant_day = models.CharField(max_length=20, blank=False, default='1')
-    business_applicant_year = models.CharField(max_length=10, blank=False, default='1')
+    business_applicant_year = models.CharField(max_length=30, blank=False, default='1')
     applicant_picture = models.ImageField(upload_to='applicants/', blank=True, null=True, max_length=100)
+    sketch_image = models.ImageField(upload_to='sketches/', blank=True, null=True, max_length=100)
+
+    bfp_tracking_no = models.CharField(blank=False, unique=True, default=generate_bfp_no, max_length=26)
 
     owners_name = models.CharField(max_length=50, blank=False, default='')
-    fire_safety_date = models.DateField(null=True)
+    name_of_business = models.CharField(max_length=120, blank=False, default='', unique=True)
+    fire_safety_date = models.DateField(null=True, blank=True)
     floor_area = models.CharField(max_length=50, blank=False, default='')
     contact_no = models.CharField(max_length=11, blank=True)
 
-    address = models.CharField(max_length=80, blank=False, default='')
+    address = models.CharField(max_length=80, blank=False, default='', unique=True)
     certified_by = models.CharField(max_length=50, blank=False, default='')
-    customer_relation_officer = models.CharField(max_length=50, blank=False, default='')
-    time_date_received = models.DateField(null=True)
-    fire_inspection_fee = models.PositiveIntegerField(default=0)
+    customer_relation_officer = models.CharField(max_length=50, blank=True, default='')
+    time_date_received = models.DateField(null=True, blank=True)
+    fire_inspection_fee = models.FloatField(default=0, validators=[MinValueValidator(0.0),], blank=True)
 
     activities_main1 = models.CharField(default='', blank=True, max_length=100)
     activities_main2 = models.CharField(default='', blank=True, max_length=100)
@@ -205,43 +239,43 @@ class BusinessPermit(models.Model):
     taxable_items3 = models.CharField(default='', blank=True, max_length=100)
     taxable_items4 = models.CharField(default='', blank=True, max_length=100)
 
-    no_of_units1 = models.PositiveIntegerField(default=0, blank=True)
-    no_of_units2 = models.PositiveIntegerField(default=0, blank=True)
-    no_of_units3 = models.PositiveIntegerField(default=0, blank=True)
-    no_of_units4 = models.PositiveIntegerField(default=0, blank=True)
+    no_of_units1 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    no_of_units2 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    no_of_units3 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    no_of_units4 = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     others_taxable_items1 = models.CharField(default='', blank=True, max_length=100)
     others_taxable_items2 = models.CharField(default='', blank=True, max_length=100)
     others_taxable_items3 = models.CharField(default='', blank=True, max_length=100)
     others_taxable_items4 = models.CharField(default='', blank=True, max_length=100)
 
-    others_no_of_units1 = models.PositiveIntegerField(default=0, blank=True)
-    others_no_of_units2 = models.PositiveIntegerField(default=0, blank=True)
-    others_no_of_units3 = models.PositiveIntegerField(default=0, blank=True)
-    others_no_of_units4 = models.PositiveIntegerField(default=0, blank=True)
+    others_no_of_units1 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    others_no_of_units2 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    others_no_of_units3 = models.PositiveIntegerField(default=0, blank=True, null=True)
+    others_no_of_units4 = models.PositiveIntegerField(default=0, blank=True, null=True)
 
-    no_of_employees = models.PositiveIntegerField(default=0, blank=True)
+    no_of_employees = models.PositiveIntegerField(default=0, blank=True, null=True)
     area_used = models.CharField(max_length=20, blank=True)
 
     single_faced = models.CharField(max_length=20, default='', blank=True)
-    no_of_tables = models.PositiveIntegerField(default=0, blank=True)
+    no_of_tables = models.PositiveIntegerField(default=0, blank=True, null=True)
     double_faced = models.CharField(max_length=20, default='', blank=True)
-    no_of_chairs = models.PositiveIntegerField(default=0, blank=True)
+    no_of_chairs = models.PositiveIntegerField(default=0, blank=True, null=True)
 
-    space_lot_rental = models.PositiveIntegerField(default=0, blank=True)
-    seating_capacity = models.PositiveIntegerField(default=0, blank=True)
+    space_lot_rental = models.PositiveIntegerField(default=0, blank=True, null=True)
+    seating_capacity = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     weight_of_45kgs_peddling = models.CharField(max_length=30, default='0', blank=True)
     weight_of_45kgs_delivery = models.CharField(max_length=30, default='0', blank=True)
-    no_of_beds = models.PositiveIntegerField(default=0, blank=True)
+    no_of_beds = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     weight_of_below_45kgs_peddling = models.CharField(max_length=30, default='0', blank=True)
     weight_of_below_45kgs_delivery = models.CharField(max_length=30, default='0', blank=True)
-    no_of_boarders = models.PositiveIntegerField(default=0, blank=True)
+    no_of_boarders = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     motorized_tricycle_peddling = models.CharField(max_length=30, default='0', blank=True)
     motorized_tricycle_delivery = models.CharField(max_length=30, default='0', blank=True)
-    estimated_capitalization = models.PositiveIntegerField(default=0, blank=True)
+    estimated_capitalization = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     motorized_peddling = models.CharField(max_length=30, default='0', blank=True)
     motorized_delivery = models.CharField(max_length=30, default='0', blank=True)
@@ -254,12 +288,15 @@ class BusinessPermit(models.Model):
 
     bplo_inspector = models.CharField(max_length=50, default='', blank=False)
 
-    inspection_date = models.DateField(auto_now=True)
+    inspection_date = models.DateField(auto_now=True, blank=True, null=True)
 
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,
         default=Gender.MALE
     )
 
+    def get_absolute_url(self):
+        return reverse('system:detail', kwargs={'pk': str(self.pk)})
+
     def __str__(self):
-        return self.business_type
+        return self.reference_no

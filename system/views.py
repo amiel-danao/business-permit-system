@@ -12,6 +12,10 @@ from django.views.generic.edit import CreateView
 from django.contrib import messages
 from django.urls import reverse
 from django_tables2.config import RequestConfig
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
+
 
 @login_required
 def index(request):
@@ -26,6 +30,7 @@ class BusinessPermitListView(LoginRequiredMixin, SingleTableView, FilterView):
     table_pagination = {
         'per_page': 5,
     }
+    strict=False
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -34,7 +39,17 @@ class BusinessPermitListView(LoginRequiredMixin, SingleTableView, FilterView):
             qs = qs.filter(status=status)
         return qs
 
-class BusinessPermitCreateView(LoginRequiredMixin, CreateView):
+    def get_context_data(self, **kwargs):
+        context = super(BusinessPermitListView, self).get_context_data(**kwargs)
+        f = self.filterset_class(self.request.GET)
+        context['filter'] = f
+        table = self.table_class(f.qs)
+        RequestConfig(self.request).configure(table)
+        context['table'] = table
+        
+        return context
+
+class BusinessPermitCreateView(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     model = BusinessPermit
     # fields = '__all__'
     form_class = BusinessPermitForm
@@ -48,5 +63,22 @@ class BusinessPermitCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        # messages.error(self.request, self.error_message)
+        for error in form.errors:
+            for key, value in form.fields[error].error_messages.items():
+                messages.error(self.request, f'{form.fields[error].label} - {value}', extra_tags=f'{error}')
         return super().form_invalid(form)
+
+
+class BusinessPermitDetailView(FormMixin, DetailView):
+    template_name = 'system/detail.html'
+    model = BusinessPermit
+    form_class = BusinessPermitForm
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'pk': self.object.id})
+
+    def get_context_data(self, **kwargs):
+        context = super(BusinessPermitDetailView, self).get_context_data(**kwargs)
+        context['form'] = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
+        context['read_only'] = True
+        return context

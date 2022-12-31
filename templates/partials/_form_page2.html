@@ -4,42 +4,47 @@
 {% load bootstrap4 %}
 
 <div id="page2Div">
-    <h4 class="my-5">Page 2</h4>
     <p class="fw-bold text-uppercase text-center">Bureau of fire station section(Application for Fire Safety inspection certificate)</p>
     <div class="row bordered-section">
         <div class="container">
             <div class="row mb-2">
-                <label for="tracking_no" class="col-2 col-form-label">Tracking No.</label>
-                <div class="col-4">
-                    <input class="form-control underlined-input" type="text" name="tracking_no" id="tracking_no">
+                <label for="bfp_tracking_no" class="col-2 col-form-label">Tracking No.</label>
+                <div class="col-4 fw-bold text-uppercase display-6">
+                    <input class="underlined-input form-control-plaintext" style="font-size:1.2rem !important; font-weight:bold;" type="text" name="bfp_tracking_no" id="bfp_tracking_no" value="{{ form.instance.bfp_tracking_no }}" readonly>
                 </div>
                 <label for="fire_safety_date" class="col-1 offset-1 col-form-label">Date:</label>
                 <div class="col-4">
-                    <input class="form-control underlined-input" type="date" name="fire_safety_date" id="fire_safety_date">
+                    <input class="form-control underlined-input" type="date" name="fire_safety_date" id="fire_safety_date" value="{{ form.fire_safety_date.value }}" >
                 </div>
             </div>
             <div class="row">
                 <p class="mb-3 text-uppercase">(To be filled out by the Applicant/Owner)</p>
-                <label for="name_of_business" class="col-3 col-form-label">Name of business:</label>
+                <label for="owners_name" class="col-3 col-form-label">Name of Applicant/Owner<span class="text-danger"> *</span>:</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="text" name="name_of_business" id="name_of_business">
+                    <input class="form-control underlined-input" type="text" name="owners_name" id="owners_name" value="{{ form.owners_name.value }}" required>
                 </div>
             </div>
             <div class="row">
-                <label for="floor_area" class="col-3 col-form-label">Total Floor Area:</label>
+                <label for="name_of_business" class="col-3 col-form-label">Name of business<span class="text-danger"> *</span>:</label>
+                <div class="col-6">
+                    <input class="form-control underlined-input" type="text" name="name_of_business" id="name_of_business"  value="{{ form.name_of_business.value }}" required>
+                </div>
+            </div>
+            <div class="row">
+                <label for="floor_area" class="col-3 col-form-label">Total Floor Area<span class="text-danger"> *</span>:</label>
                 <div class="col-4">
-                    <input class="form-control underlined-input" type="text" name="floor_area" id="floor_area">
+                    <input class="form-control underlined-input" type="text" name="floor_area" id="floor_area" value="{{ form.floor_area.value }}" required>
                 </div>
                 <label for="contact_no" class="col col-form-label">Contact No.</label>
                 <div class="col">
-                    <input class="form-control underlined-input" type="text" pattern="[0][0-9]{10}" name="contact_no" maxlength="11"  id="contact_no">
+                    <input class="form-control underlined-input" type="text" pattern="[0][0-9]{10}" name="contact_no" maxlength="11"  value="{{ form.contact_no.value }}"  id="contact_no">
                 </div>
                 
             </div>
             <div class="row">
-                <label for="address" class="col-4 col-form-label">Address of Establishment:</label>
+                <label for="address" class="col-4 col-form-label">Address of Establishment<span class="text-danger"> *</span>:</label>
                 <div class="col-8">
-                    <input class="form-control underlined-input" type="text" name="address" id="address">
+                    <input class="form-control underlined-input" type="text" name="address" id="address"  value="{{ form.address.value }}"  required>
                 </div>
             </div>
             <div class="row mt-5">
@@ -49,26 +54,26 @@
                 </div>
             </div>
             <div class="row">
-                <label for="certified_by" class="col-3 col-form-label">Certified By:</label>
+                <label for="certified_by" class="col-3 col-form-label">Certified By<span class="text-danger"> *</span>:</label>
                 <div class="col-4">
-                    <input class="form-control underlined-input" type="text" name="certified_by" id="certified_by">
+                    <input class="form-control underlined-input" type="text" name="certified_by" id="certified_by" value="{{ form.certified_by.value }}" required>
                 </div>
             </div>
             <div class="row">
                 <label for="customer_relation_officer" class="col-2 col-form-label">Customer Relation Officer:</label>
                 <div class="col-2">
-                    <input class="form-control underlined-input" type="text" name="customer_relation_officer" id="customer_relation_officer">
+                    <input class="form-control underlined-input" type="text" name="customer_relation_officer" id="customer_relation_officer" value="{{ form.customer_relation_officer.value }}"  >
                 </div>
                 <label for="time_date_received" class="col-2 col-form-label">Time and Date Received:</label>
                 <div class="col-2">
-                    <input class="form-control underlined-input" type="date" name="time_date_received" id="time_date_received">
+                    <input class="form-control underlined-input" type="date" name="time_date_received" id="time_date_received" value="{{ form.time_date_received.value }}">
                 </div>
 
                 <div class="col">
                     <label class="visually-hidden" for="fire_inspection_fee"></label>
                     <div class="input-group mb-3 h-100">
-                        <small class="input-group-text col-5">Fire inspection fee assessment:</small>
-                        <input type="number" class="form-control h-100" name="fire_inspection_fee" id="fire_inspection_fee" placeholder="0.00">
+                        <small class="input-group-text col-5 to_disable_on_read_only">Fire inspection fee assessment:</small>
+                        <input type="number" class="form-control h-100" name="fire_inspection_fee" value="0" min="0" id="fire_inspection_fee" placeholder="0.0" value="{{ form.fire_inspection_fee.value }}">
                     </div>
                 </div>
 
@@ -80,12 +85,12 @@
     <p class="activities-label">Important Notice: As per Section 12 of the implementing Rules and Regulations of the Fire Code of 2018, certain establishment (e.g building lessers, fire, earthquake, and explosion hazard insurance companies and vendors of firefighting equipment, appliance and devices) may be required to pay addittional charges and fees other than the Fire Safety Inspection Fees. Theses shall be collected during inspections or in another process to be communicated by representatives of the Bureau of Fire Protection (BFP).</p>
 
     
-    <div class="row bordered-section" style="min-height:70vh;">
+    <div class="row bordered-section" style="height:250px;">
         <label for="sketch_image">
             <h4>Map Sketch</h4>
         
             <div class="col-12">
-                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here">
+                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here" src="{% if form.sketch_image %}{{ form.sketch_image.url }}{% else %}{{ form.sketch_image.value }}{% endif %}">
             </div>
         </label>
         <input type="file" name="sketch_image" class="form-control d-none" id="sketch_image" accept="image/jpeg, image/png, image/jpg"/>
@@ -104,27 +109,27 @@
         <div class="col-3 text-right">
             <p>Main</p>
         </div>
-        <div class="col-4"><input class="underlined-input w-100" name="activities_main1"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="taxable_items1"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="no_of_units1"/></div>
+        <div class="col-4"><input class="underlined-input w-100" name="activities_main1" value="{{ form.activities_main1.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items1" value="{{ form.taxable_items1.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units1" value="{{ form.no_of_units1.value }}"/></div>
     </div>
 
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main2"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="taxable_items2"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="no_of_units2"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main2" value="{{ form.activities_main2.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items2" value="{{ form.taxable_items2.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units2" value="{{ form.no_of_units2.value }}"/></div>
     </div>
 
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main3"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="taxable_items3"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="no_of_units3"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main3" value="{{ form.activities_main3.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items3" value="{{ form.taxable_items3.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units3" value="{{ form.no_of_units3.value }}"/></div>
     </div>
 
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main4"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="taxable_items4"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="no_of_units4"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_main4" value="{{ form.activities_main4.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="taxable_items4" value="{{ form.taxable_items4.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="no_of_units4" value="{{ form.no_of_units4.value }}"/></div>
     </div>
 
     <!-- Others -->
@@ -133,37 +138,37 @@
         <div class="col-3 text-right">
             <p>Others</p>
         </div>
-        <div class="col-4"><input class="underlined-input w-100" name="activities_others1"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items1"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units1"/></div>
+        <div class="col-4"><input class="underlined-input w-100" name="activities_others1" value="{{ form.activities_others1.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items1" value="{{ form.others_taxable_items1.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units1" value="{{ form.others_no_of_units1.value }}"/></div>
     </div>
 
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others2"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items2"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units2"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others2" value="{{ form.activities_others2.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items2" value="{{ form.others_taxable_items2.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units2" value="{{ form.others_no_of_units2.value }}"/></div>
     </div>
 
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others3"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items3"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units3"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others3" value="{{ form.activities_others3.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items3" value="{{ form.others_taxable_items3.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units3" value="{{ form.others_no_of_units3.value }}"/></div>
     </div>
     
     <div class="row text-uppercase activities-label">
-        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others4"/></div>
-        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items4"/></div>
-        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units4"/></div>
+        <div class="col-4 offset-3"><input class="underlined-input w-100" name="activities_others4" value="{{ form.activities_others4.value }}"/></div>
+        <div class="col-3"><input class="underlined-input w-100" name="others_taxable_items4" value="{{ form.others_taxable_items4.value }}"/></div>
+        <div class="col-2"><input class="underlined-input w-100" name="others_no_of_units4" value="{{ form.others_no_of_units4.value }}"/></div>
     </div>
 
     <div class="row mt-2">
         <label for="no_of_employees" class="col-3 col-form-label text-capitalize">No. of Employees</label>
         <div class="col-3">
-            <input class="form-control underlined-input" type="number" min="0" name="no_of_employees" id="no_of_employees">
+            <input class="form-control underlined-input" type="number" min="0" name="no_of_employees" id="no_of_employees" value="{{ form.no_of_employees.value }}"> 
         </div>
         <label for="area_used" class="col-3 col-form-label text-capitalize">Area used in business(in sq.m.)</label>
         <div class="col-3">
-            <input class="form-control underlined-input" type="text" name="area_used" id="area_used">
+            <input class="form-control underlined-input" type="text" name="area_used" id="area_used" value="{{ form.area_used.value }}">
         </div>
     </div>
 
@@ -173,7 +178,7 @@
                 <p class="mb-0 activities-label">Signboard(in sq.m)</p>
                 <label for="single_faced" class="col-3 offset-2 col-form-label text-capitalize">Single Faced:</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="text" name="single_faced" id="single_faced">
+                    <input class="form-control underlined-input" type="text" name="single_faced" id="single_faced" value="{{ form.single_faced.value }}">
                 </div>
             </div>
         </div>
@@ -183,7 +188,7 @@
                 <p class="mb-0 activities-label">For Eatery Establishment:</p>
                 <label for="no_of_tables" class="col-5 offset-2 col-form-label text-capitalize">No. of Tables:</label>
                 <div class="col-5">
-                    <input class="form-control underlined-input" min=0 type="number" name="no_of_tables" id="no_of_tables">
+                    <input class="form-control underlined-input" min=0 type="number" name="no_of_tables" id="no_of_tables" value="{{ form.no_of_tables.value }}">
                 </div>
             </div>
         </div>
@@ -194,7 +199,7 @@
             <div class="row">
                 <label for="double_faced" class="col-3 offset-2 col-form-label text-capitalize">Double Faced:</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="text" name="double_faced" id="double_faced">
+                    <input class="form-control underlined-input" type="text" name="double_faced" id="double_faced" value="{{ form.double_faced.value }}">
                 </div>
             </div>
         </div>
@@ -203,7 +208,7 @@
             <div class="row">
                 <label for="no_of_chairs" class="col-5 offset-2 col-form-label text-capitalize">No. of Chairs:</label>
                 <div class="col-5">
-                    <input class="form-control underlined-input" min=0 type="number" name="no_of_chairs" id="no_of_chairs">
+                    <input class="form-control underlined-input" min=0 type="number" name="no_of_chairs" id="no_of_chairs" value="{{ form.no_of_chairs.value }}">
                 </div>
             </div>
         </div>
@@ -214,7 +219,7 @@
             <div class="row">
                 <label for="space_lot_rental" class="col-3 offset-2 col-form-label text-capitalize">Bldg. Space/Lot Rental: ₱</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="number" min="0" name="space_lot_rental" id="space_lot_rental">
+                    <input class="form-control underlined-input" type="number" min="0" name="space_lot_rental" id="space_lot_rental" value="{{ form.space_lot_rental.value }}">
                 </div>
             </div>
         </div>
@@ -223,7 +228,7 @@
             <div class="row">
                 <label for="seating_capacity" class="col-5 offset-2 col-form-label text-capitalize">Total Seating Capacity:</label>
                 <div class="col-5">
-                    <input class="form-control underlined-input" min=0 type="number" name="seating_capacity" id="seating_capacity">
+                    <input class="form-control underlined-input" min=0 type="number" name="seating_capacity" id="seating_capacity" value="{{ form.seating_capacity.value }}">
                 </div>
             </div>
         </div>
@@ -261,18 +266,18 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="weight_of_45kgs_peddling"/>
+            <input class="form-control underlined-input" name="weight_of_45kgs_peddling"  value="{{ form.weight_of_45kgs_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="weight_of_45kgs_delivery"/>
+            <input class="form-control underlined-input" name="weight_of_45kgs_delivery"  value="{{ form.weight_of_45kgs_delivery.value }}"/>
         </div>
 
         <div class="col-5">
             <div class="row">
                 <label for="no_of_beds" class="col-4 offset-2 col-form-label">No. of Beds:</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="number" min="0" name="no_of_beds" id="no_of_beds">
+                    <input class="form-control underlined-input" type="number" min="0" name="no_of_beds" id="no_of_beds" value="{{ form.no_of_beds.value }}">
                 </div>
             </div>
         </div>
@@ -288,18 +293,18 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="weight_of_below_45kgs_peddling"/>
+            <input class="form-control underlined-input" name="weight_of_below_45kgs_peddling"  value="{{ form.weight_of_below_45kgs_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="weight_of_below_45kgs_delivery"/>
+            <input class="form-control underlined-input" name="weight_of_below_45kgs_delivery"  value="{{ form.weight_of_below_45kgs_delivery.value }}"/>
         </div>
 
         <div class="col-5">
             <div class="row">
                 <label for="no_of_boarders" class="col-4 offset-2 col-form-label">Total No. of Boarders:</label>
                 <div class="col-6">
-                    <input class="form-control underlined-input" type="number" min="0" name="no_of_boarders" id="no_of_boarders">
+                    <input class="form-control underlined-input" type="number" min="0" name="no_of_boarders" id="no_of_boarders" value="{{ form.no_of_boarders.value }}">
                 </div>
             </div>
         </div>
@@ -315,19 +320,19 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="motorized_tricycle_peddling"/>
+            <input class="form-control underlined-input" name="motorized_tricycle_peddling" value="{{ form.motorized_tricycle_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="motorized_tricycle_delivery"/>
+            <input class="form-control underlined-input" name="motorized_tricycle_delivery" value="{{ form.motorized_tricycle_delivery.value }}"/>
         </div>
 
         <div class="col-5">
             <div class="row">
                 <label for="estimated_capitalization" class="col-4 offset-2 col-form-label">Estimated Capitalization:</label>
                 <div class="col-6 input-group">
-                    <span class="input-group-text">₱</span>
-                    <input class="form-control h-100" type="number" min="0" name="estimated_capitalization" id="estimated_capitalization">
+                    <p class="input-group-text to_disable_on_read_only">₱ </p>
+                    <input class="form-control h-100" type="number" min="0" value="0" name="estimated_capitalization" id="estimated_capitalization" value="{{ form.estimated_capitalization.value }}">
                 </div>
             </div>
         </div>
@@ -344,11 +349,11 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="motorized_peddling"/>
+            <input class="form-control underlined-input" name="motorized_peddling"  value="{{ form.motorized_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="motorized_delivery"/>
+            <input class="form-control underlined-input" name="motorized_delivery"  value="{{ form.motorized_delivery.value }}"/>
         </div>
     </div>
 
@@ -363,11 +368,11 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="others_peddling"/>
+            <input class="form-control underlined-input" name="others_peddling" value="{{ form.others_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="others_delivery"/>
+            <input class="form-control underlined-input" name="others_delivery" value="{{ form.others_delivery.value }}"/>
         </div>
     </div>
 
@@ -381,11 +386,11 @@
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="pedicabs_peddling"/>
+            <input class="form-control underlined-input" name="pedicabs_peddling" value="{{ form.pedicabs_peddling.value }}"/>
         </div>
 
         <div class="col-2">
-            <input class="form-control underlined-input" name="pedicabs_delivery"/>
+            <input class="form-control underlined-input" name="pedicabs_delivery" value="{{ form.pedicabs_delivery.value }}"/>
         </div>
     </div>
 
@@ -395,13 +400,13 @@
         </div>
 
         <div class="col-4">
-            <input class="underlined-input py-0 my-0 w-100" name="bplo_inspector" required>
+            <input class="underlined-input py-0 my-0 w-100" name="bplo_inspector" value="{{ form.bplo_inspector.value }}" required>
         </div>
     </div>
 
     <div class="row activities-label">
         <div class="col-4 offset-3 text-center">
-            <div class="w-100"><small class="align-top text-capitalize agreement-text">BPLO Inspector</small></div>
+            <div class="w-100"><small class="align-top text-capitalize agreement-text">BPLO Inspector<span class="text-danger"> *</span></small></div>
         </div>
     </div>
     
@@ -410,7 +415,7 @@
             <div class="row">
                 <label for="inspection_date" class="col-4 col-form-label">Date of Inspection:</label>
                 <div class="col-8">
-                    <input class="form-control underlined-input" type="date" name="inspection_date" id="inspection_date">
+                    <input class="form-control underlined-input" type="date" name="inspection_date" id="inspection_date"  value="{{ form.inspection_date.value }}">
                 </div>
             </div>
         </div>

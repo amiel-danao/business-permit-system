@@ -3,8 +3,10 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button, Div, Field, HTML
 from crispy_forms.bootstrap import PrependedText
 from crispy_bootstrap5.bootstrap5 import FloatingField
-from system.models import BusinessPermit
+from system.models import BusinessPermit, YesNoChoice
 from django.utils.translation import gettext_lazy as _
+from system.models import BusinessType
+
 
 PHONE_NUMBER_ATTRS = {'pattern': '[0][0-9]{10}', 'maxlength': '11'}
 
@@ -44,16 +46,28 @@ class BusinessPermitForm(forms.ModelForm):
     police_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
     others_clearance_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), label='Date issued', required=False)
 
+    business_type = forms.TypedChoiceField(
+        label = "Kind of ownership",
+        choices = BusinessType.choices,
+        widget = forms.RadioSelect(attrs={'class': 'form-check form-check-inline'}),
+        initial = '1',
+        required = True,
+    )
+
     class Meta:
         model = BusinessPermit
         fields = '__all__'
-        exclude = ('reference_no', 'user', 'owners_gender', 'status')
+        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no')
         
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, read_only=False, *args, **kwargs):
         super(BusinessPermitForm, self).__init__(*args, **kwargs)
         
         self.helper = FormHelper(self)
+        
+        if read_only:
+            for nam, field in self.fields.items():
+                field.disabled = True
         
         self.helper.form_show_errors = True
         self.helper.error_text_inline = True

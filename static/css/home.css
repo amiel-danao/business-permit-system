@@ -68,7 +68,7 @@ td{
 }
 
 .form-logo{
-    width:16%;
+    width:14%;
     height: auto;
 }
 
@@ -83,7 +83,7 @@ td{
     /* opacity: 0.5; */
 }
 
-#page2Div .input-group-text, .activities-label, input{
+#page2Div .input-group-text, .activities-label, #page2Div input{
     font-size: 0.7rem !important;
 }
 
@@ -119,13 +119,15 @@ form .input-group-text{
     background-color: white;
 }
 
-table tr .column-label{
+table tr .column-label, #table_verification_documents td, #table_verification_documents th{
     color: black;
     opacity: 0.8;
     background-color: white;
     text-align: center;
     font-size: 0.7rem;
     text-transform: uppercase;
+    margin:0px !important;
+    padding:0px !important;
 }
 
 
@@ -198,3 +200,35 @@ table tr .column-label{
   #toTopBtn:hover {
     background-color: #555; /* Add a dark-grey background on hover */
   }
+
+  .error_field_shortcut{
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .error_field_shortcut:hover{
+    opacity: 1;
+  }
+
+  .table-hover tr{
+    cursor: pointer;
+  }
+
+  .form-control:disabled, .form-control[readonly] {
+        background-color: inherit;
+        opacity: 1;
+    }
+
+    .form-select:disabled {
+        background-color: inherit;
+    }
+
+    .form-control {
+        height: 28px !important;
+        font-size: 0.8rem;
+        letter-spacing: 0.01px;
+     }
+
+     .bpls-form-header p{
+        font-size: 0.8rem !important;
+     }
