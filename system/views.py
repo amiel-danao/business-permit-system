@@ -23,7 +23,7 @@ from django.views.generic import View
 from xhtml2pdf import pisa
 from django.db.models import Q
 import urllib
-
+from django.utils import timezone
 
 
 @login_required
@@ -144,6 +144,7 @@ def confirm_certificate(request, pk):
     instance.processing_fee = request.POST.get('processing_fee', 0)
     instance.business_permit_fee = request.POST.get('business_permit_fee', 0)
     instance.sticker_fee = request.POST.get('sticker_fee', 0)
+    instance.date_of_issuance = timezone.now()
     instance.save()
 
     return redirect_with_params('system:index', status='3')

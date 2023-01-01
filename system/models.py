@@ -317,9 +317,9 @@ class BusinessPermit(models.Model):
 
     inspection_date = models.DateField(auto_now=True, blank=True, null=True)
 
-    processing_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
-    business_permit_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
-    sticker_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
+    processing_fee = models.FloatField(default=0, null=True, blank=True)
+    business_permit_fee = models.FloatField(default=0, null=True, blank=True)
+    sticker_fee = models.FloatField(default=0, null=True, blank=True)
 
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,
