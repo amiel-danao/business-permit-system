@@ -1,0 +1,21 @@
+
+{% if form %}
+<div class="container-fluid">
+    <div class="row bg-secondary bg-opacity-20">
+        <div class="col">
+            <h4 class="text-white fw-bolder">{{ form.instance.reference_no }}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <p>Reason why application is denied?</p><br>
+        <p class="text-black fw-bolder">
+            {{ form.deny_reason }}
+        </p>
+        <p>Remarks</p><br>
+        <p class="text-black fw-bolder">
+            {{ form.deny_remarks }}
+        </p>
+    </div>
+</div>
+{% endif %}

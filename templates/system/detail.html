@@ -91,17 +91,12 @@
     <div class="d-flex align-items-start" >
         <button id="sideBarExpand" class="collapse multi-collapse btn btn-primary text-white fw-bold" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="sideBarExpand v-pills-tab"><i class="bi bi-chevron-double-right"></i></button>
         
-        <div class="col-3 nav p-5 flex-column nav-pills me-3 sidebar collapse multi-collapse show" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="btn text-white fw-bold" data-bs-toggle="collapse" data-bs-target=".multi-collapse"  aria-expanded="false" aria-controls="sideBarExpand v-pills-tab">Business Management <span><i class="bi bi-chevron-double-left text-white"></i></span></button>
-            <a class="nav-link {% if request.path != '/permit/create/'%}{% if not request.GET.status or request.GET.status == '1'%} active{% endif %}{% endif %}" href="{% url 'system:index'%}?status=1" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
-            <a class="nav-link {% if request.GET.status == '2'%} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a>
-            <a class="nav-link {% if request.GET.status == '5'%} active{% endif %}" href="{% url 'system:index'%}?status=5" id="v-pills-disabled-tab" type="button"  aria-selected="false">My Businesses</a>
-            <a class="nav-link {% if request.path == '/permit/create/'%} active{% endif %}" href="{% url 'system:create'%}" id="v-pills-messages-tab" type="button" role="tab" aria-selected="false">New Application</a>
-        </div>
+        {% include 'partials/_sidebar.html' %}
+        
         <div class="col shadow tab-content" id="v-pills-tabContent">
             
 
-            {% if form %}
+            {% if form and form.instance.status == 1%}
             <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
                 <div class="container p-2">
                     {% if messages %}
@@ -123,10 +118,57 @@
                     {% include 'partials/_form_page2.html' %}
                     
                         <div class="row" id="page2Buttons">
-                            <div class="col-3">
-                                <button onclick="downloadPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
-                                <!-- <a href="{% url 'system:permit-download' pk=form.instance.pk %}" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></a> -->
-                            </div>
+                            {% if request.user.is_superuser and form.instance.status == 4 or form.instance.status == 5 %}
+                                <div class="col-3">
+                                    <button onclick="downloadPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
+                                </div>
+                            {% endif %}
+
+
+                             {% if request.user.is_superuser %}
+                                {% if form.instance.status == 1 %}
+                                    <p>Submitted Business Requirements:</p>
+                                    
+                                    <ul class="pl-4">
+                                        {% if form.barangay_business_clearance.value %}
+                                            <li><a href="{{ barangay_business_clearance.value.url }}">Barangay Clearance</a></li>
+                                        {% endif %}
+                                        {% if form.proof_of_business_name_registration.value %}
+                                            <li><a href="{{ proof_of_business_name_registration.value.url }}">Business Name Registration</a></li>
+                                        {% endif %}
+                                        {% if form.community_tax_certificate.value %}
+                                            <li><a href="{{ community_tax_certificate.value.url }}">Community Tax Certificate</a></li>
+                                        {% endif %}
+                                    </ul>
+                                    <hr>
+
+                                    <div class="col-3 collapse show multi-collapsed" id="acceptButton">
+                                        <a href="{% url 'system:approve' pk=form.instance.pk %}" type="button" class="btn btn-success">Approve Application</a>
+                                    </div>
+                                    <div class="col-3 collapse show multi-collapsed">
+                                        <a href="#" type="button" class="btn btn-danger"  data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Deny Application</a>
+                                    </div>
+                                    <div class="col-4 collapse multi-collapsed" id="denyForm">
+                                        <form class="form" method="post" action="{% url 'system:reject' pk=form.instance.pk %}">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label for="reason_reject">Reason</label>
+                                                <input name="deny_reason" type="text" class="form-control" placeholder="No reason" id="reason_reject" required>
+                                                
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="remarks_reject">Remarks</label>
+                                                <textarea name="deny_remarks" placeholder="Remarks" id="remarks_reject" rows="4" cols="50" required></textarea>
+                                                
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Cancel</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                         </div>
 
                     </form>
@@ -134,6 +176,15 @@
             </div>
             {% endif %}
 
+            {% if form and form.instance.status == 2 %}
+                {% include 'partials/_deny_view.html' %}
+            {% endif %}
+            
+            {% if form and form.instance.status == 3 %}
+            <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+                    For Issuance
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

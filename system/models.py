@@ -48,23 +48,27 @@ class YesNoChoice(models.IntegerChoices):
     YES = 1, "Yes"
     NO = 0, "No"
 
+class Status(models.IntegerChoices):
+    FOR_VERIFICATION = 1
+    DENIED = 2
+    FOR_ASSESSMENT_OF_FEES = 3
+    FOR_ISSUANCE = 4
+    ISSUED = 5
+
+class TransactionType(models.IntegerChoices):
+    NEW_APPLICATION = 1
+    RENEWAL = 2
+    QUARTERLY = 3
+    SEMI_ANNUAL = 4
+    ANNUALY = 5
+
 class BusinessPermit(models.Model):
     
     class Gender(models.IntegerChoices):
         MALE = 1
         FEMALE = 2
-    class Status(models.IntegerChoices):
-        FOR_VERIFICATION = 1
-        DENIED = 2
-        FOR_ASSESSMENT_OF_FEES = 3
-        FOR_ISSUANCE = 4
-        ISSUED = 5
-    class TransactionType(models.IntegerChoices):
-        NEW_APPLICATION = 1
-        RENEWAL = 2
-        QUARTERLY = 3
-        SEMI_ANNUAL = 4
-        ANNUALY = 5
+    
+
     user = models.ForeignKey(CustomUser,
                              on_delete=models.CASCADE)
 
@@ -294,6 +298,9 @@ class BusinessPermit(models.Model):
         choices=Gender.choices,
         default=Gender.MALE
     )
+
+    deny_reason = models.CharField(max_length=30, blank=True, default='')
+    deny_remarks = models.CharField(max_length=200, blank=True, default='')
 
     def get_absolute_url(self):
         return reverse('system:detail', kwargs={'pk': str(self.pk)})

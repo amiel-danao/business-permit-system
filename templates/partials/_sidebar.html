@@ -1,0 +1,20 @@
+<div class="col-3 nav p-5 flex-column nav-pills me-3 sidebar collapse multi-collapse show" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <button class="btn text-white fw-bold" data-bs-toggle="collapse" data-bs-target=".multi-collapse"  aria-expanded="false" aria-controls="sideBarExpand v-pills-tab">Business Management <span><i class="bi bi-chevron-double-left text-white"></i></span></button>
+    {% if request.user.is_superuser %}
+    <a class="nav-link {% if not page_status %} active{% endif %}" href="{% url 'system:index'%}" id="v-pills-home-tab"  type="button"  aria-selected="true">Dashboard</a>
+    <a class="nav-link {% if page_status == 1%} active{% endif %}" href="{% url 'system:index'%}?status=1" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
+    {% else %}
+    <a class="nav-link {% if request.path != '/permit/create/'%}{% if not page_status %} active{% endif %}{% endif %}" href="{% url 'system:index'%}" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
+    {% endif %}
+
+    <a class="nav-link {% if page_status == 2 %} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a>
+    {% if request.user.is_superuser %}
+    <a class="nav-link {% if page_status == 3 %} active{% endif %}" href="{% url 'system:index'%}?status=3" id="v-pills-profile-tab" type="button" aria-selected="false">For Assessment of Fees</a>
+    <a class="nav-link {% if page_status == 4 %} active{% endif %}" href="{% url 'system:index'%}?status=4" id="v-pills-profile-tab" type="button" aria-selected="false">For Issuance</a>
+    <a class="nav-link {% if page_status == 5 %} active{% endif %}" href="{% url 'system:index'%}?status=5" id="v-pills-profile-tab" type="button" aria-selected="false">Issued Business Permits</a>
+    
+    {% else %}
+        <a class="nav-link {% if page_status == '5'%} active{% endif %}" href="{% url 'system:index'%}?status=5" id="v-pills-disabled-tab" type="button"  aria-selected="false">My Businesses</a>
+        <a class="nav-link {% if request.path == '/permit/create/'%} active{% endif %}" href="{% url 'system:create'%}" id="v-pills-messages-tab" type="button" role="tab" aria-selected="false">New Application</a>
+    {% endif %}
+</div>

@@ -17,18 +17,72 @@
 <div class="container-fluid pt-5">
     <div class="d-flex align-items-start" >
         <button id="sideBarExpand" class="collapse multi-collapse btn btn-primary text-white fw-bold" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="sideBarExpand v-pills-tab"><i class="bi bi-chevron-double-right"></i></button>
+        {% include 'partials/_sidebar.html' %}
         
-        <div class="col-3 nav p-5 flex-column nav-pills me-3 sidebar collapse multi-collapse show" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="btn text-white fw-bold" data-bs-toggle="collapse" data-bs-target=".multi-collapse"  aria-expanded="false" aria-controls="sideBarExpand v-pills-tab">Business Management <span><i class="bi bi-chevron-double-left text-white"></i></span></button>
-            <a class="nav-link {% if request.path != '/permit/create/'%}{% if not request.GET.status or request.GET.status == '1'%} active{% endif %}{% endif %}" href="{% url 'system:index'%}?status=1" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
-            <a class="nav-link {% if request.GET.status == '2'%} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a>
-            <a class="nav-link {% if request.GET.status == '5'%} active{% endif %}" href="{% url 'system:index'%}?status=5" id="v-pills-disabled-tab" type="button"  aria-selected="false">My Businesses</a>
-            <a class="nav-link {% if request.path == '/permit/create/'%} active{% endif %}" href="{% url 'system:create'%}" id="v-pills-messages-tab" type="button" role="tab" aria-selected="false">New Application</a>
-        </div>
         <div class="col shadow tab-content" id="v-pills-tabContent">
-            {% if table %}
-            <div class="p-5 tab-pane fade {% if not request.GET.status or request.GET.status != '-1'%} show active{% endif %}" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+            {% if request.user.is_superuser and not request.GET.status and not request.GET.all %}
+                <div class="row p-5">
+                    <small>Hi Admin, welcome to your dashboard</small>
+                    <hr>
+                    <small>Business permit applications summary</small>
+
+                    <div class="mt-3 container-fluid text-white text-uppercase text-center">
+                        <div class="row">
+                            <div class="col mx-1 bg-secondary bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?all=1">
+                                    <p class="mb-0">Total Applications</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ total_applications }}</p>
+                                </a>
+                            </div>
+                            <div class="col mx-1 bg-danger bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?status=2">
+                                    <p class="mb-0">Denied Applications</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ denied_applications }}</p>
+                                </a>
+                            </div>
+                            <div class="col mx-1 bg-success bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?status=5">
+                                    <p class="mb-0">Issued Permits</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ issued_applications }}</p>  
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col mx-1 bg-primary bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?status=1">
+                                    <p class="mb-0">For Verification</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ for_verification_count }}</p>  
+                                </a>
+                            </div>
+                            <div class="col mx-1 bg-warning bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?transaction_type=2">
+                                    <p class="mb-0">For Renewal</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ for_renewals_count }}</p>
+                                </a>  
+                            </div>
+                            <div class="col mx-1 bg-secondary bg-gradient bg-opacity-20 rounded p-4 dashboard-card">
+                                <a class="application-card-link" href="{% url 'system:index'%}?status=4">
+                                    <p class="mb-0">For Printing/Issuance</p>
+                                    <hr class="border border-white opacity-100 my-0 py-0">
+                                    <p class="mt-2 mb-0">{{ for_issuance_count }}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             
+
+            {% elif table %}
+                
+            <div class="p-5 tab-pane fade {% if not request.GET.status or request.GET.status != '-1'%} show active{% endif %}" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                
+
             {% if filter %}
                 <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Search <i class="bi bi-search"></i>
@@ -104,7 +158,8 @@
     <script type="text/javascript">
         $(document).ready(function($) {
             $(".records-table tr").click(function() {
-                window.location = $(this).data("href");
+                if (this.hasAttribute('data-href'))
+                    window.location = $(this).data("href");
             });
         });
     </script>

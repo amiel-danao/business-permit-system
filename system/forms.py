@@ -57,7 +57,7 @@ class BusinessPermitForm(forms.ModelForm):
     class Meta:
         model = BusinessPermit
         fields = '__all__'
-        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no')
+        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no', 'deny_reason', 'deny_remarks')
         
 
     def __init__(self, read_only=False, *args, **kwargs):

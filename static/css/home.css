@@ -228,3 +228,12 @@ table tr .column-label, #table_verification_documents td, #table_verification_do
      .bpls-form-header p{
         font-size: 0.8rem !important;
      }
+
+     .dashboard-card{
+        font-family: 'Inter' ,sans-serif;
+     }
+
+     .application-card-link{
+        text-decoration: none;
+        color:inherit !important;
+     }

@@ -560,7 +560,7 @@
                     </div>
                     <div class="col-3 p-2 {% if not form.applicant_picture %}placeholder-glow{% endif %}">
                         <div class="d-flex justify-content-center {% if not form.applicant_picture %}placeholder bg-dark{% endif %}">
-                            <label class="form-label text-white m-1" for="applicant_picture"><img class="img-fluid" id="applicant_image_thumbnail" src="{% if form.applicant_picture %}{{ form.applicant_picture.value.url }}{% else %}{% static 'img/id_picture_placeholder.svg' %}{% endif %}"
+                            <label class="form-label text-white m-1" for="applicant_picture"><img class="img-fluid" id="applicant_image_thumbnail" src="{% if form.applicant_picture.value %}{{ form.applicant_picture.value.url }}{% else %}{% static 'img/id_picture_placeholder.svg' %}{% endif %}"
                                 alt="2x2 I.D Picture"/></label>
                             <input type="file" name="applicant_picture" class="form-control d-none" id="applicant_picture" accept="image/jpeg, image/png, image/jpg"/>
                         </div>

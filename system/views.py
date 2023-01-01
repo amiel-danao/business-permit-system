@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required as login_required
 from django.views.generic import ListView
 from system.filters import BusinessPermitFilter
 from system.forms import BusinessPermitForm
-from system.models import BusinessPermit
+from system.models import BusinessPermit, Status, TransactionType
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_tables2 import SingleTableView
 from system.tables import BusinessPermitTable
@@ -18,10 +18,10 @@ from django.views.generic.edit import FormMixin
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.generic import View
 from xhtml2pdf import pisa
-
+from django.db.models import Q
 
 
 
@@ -42,6 +42,8 @@ class BusinessPermitListView(LoginRequiredMixin, SingleTableView, FilterView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        if not self.request.user.is_superuser:
+            qs = qs.filter(user=self.request.user)
         status = self.request.GET.get("status", None)
         if status is not None:
             qs = qs.filter(status=status)
@@ -49,13 +51,26 @@ class BusinessPermitListView(LoginRequiredMixin, SingleTableView, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super(BusinessPermitListView, self).get_context_data(**kwargs)
-        f = self.filterset_class(self.request.GET)
+        species=self.get_queryset()
+        f = self.filterset_class(self.request.GET, queryset=species)
         context['filter'] = f
         table = self.table_class(f.qs)
         RequestConfig(self.request).configure(table)
         context['table'] = table
+
+        context['total_applications'] = BusinessPermit.objects.all().count()
+        context['denied_applications'] = BusinessPermit.objects.filter(status=Status.DENIED).count()
+        context['issued_applications'] = BusinessPermit.objects.filter(status=Status.ISSUED).count()
         
+        context['for_verification_count'] = BusinessPermit.objects.filter(status=Status.FOR_VERIFICATION).count()
+        context['for_renewals_count'] = BusinessPermit.objects.filter(~Q(status=Status.ISSUED), transaction_type=TransactionType.RENEWAL).count()
+        context['for_issuance_count'] = BusinessPermit.objects.filter(status=Status.FOR_ISSUANCE).count()
+        
+        page_status = self.request.GET.get('status', None)
+        if page_status:
+            context['page_status'] = int(page_status)
         return context
+
 
 class BusinessPermitCreateView(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     model = BusinessPermit
@@ -87,43 +102,35 @@ class BusinessPermitDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BusinessPermitDetailView, self).get_context_data(**kwargs)
-        context['form'] = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
+        form = None
+        if self.object.status != Status.ISSUED:
+            form = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
+            context['form'] = form
         context['read_only'] = True
+        context['page_status'] = form.instance.status
         return context
 
 
-def render_to_pdf2(request, pk):
+@login_required
+def reject_application(request, pk):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
     instance = get_object_or_404(BusinessPermit, pk=pk)
-    context_dict = {'form': BusinessPermitForm(True, request.GET or None, instance=instance)}
-    template = get_template('system/detail.html')
-    html  = template.render(context_dict)
-    result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode('utf-8')), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return None
+    instance.status = Status.DENIED
+    instance.deny_reason = request.POST.get('deny_reason', '')
+    instance.deny_remarks = request.POST.get('deny_remarks', '')
+    instance.save()
+    return redirect('system:index')
 
-def render_to_pdf(request, pk):
+
+@login_required
+def approve_application(request, pk):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
     instance = get_object_or_404(BusinessPermit, pk=pk)
-    context = {'form': BusinessPermitForm(True, request.GET or None, instance=instance)}
-    template_path = 'system/detail.html'
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-
+    instance.status = Status.FOR_ISSUANCE
+    instance.save()
+    return redirect('system:index')
 
 # class GeneratePdf(View):
 #     def get(self, request, *args, **kwargs):
