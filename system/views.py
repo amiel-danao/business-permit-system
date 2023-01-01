@@ -18,10 +18,11 @@ from django.views.generic.edit import FormMixin
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import View
 from xhtml2pdf import pisa
 from django.db.models import Q
+import urllib
 
 
 
@@ -120,7 +121,7 @@ def reject_application(request, pk):
     instance.deny_reason = request.POST.get('deny_reason', '')
     instance.deny_remarks = request.POST.get('deny_remarks', '')
     instance.save()
-    return redirect('system:index')
+    return redirect_with_params('system:index', status='2')
 
 
 @login_required
@@ -128,14 +129,34 @@ def approve_application(request, pk):
     if request.method != 'POST':
         return HttpResponseBadRequest()
     instance = get_object_or_404(BusinessPermit, pk=pk)
-    instance.status = Status.FOR_ISSUANCE
+    instance.status = Status.FOR_ASSESSMENT_OF_FEES
     instance.save()
-    return redirect('system:index')
+    return redirect_with_params('system:index', status='1')
 
-# class GeneratePdf(View):
-#     def get(self, request, *args, **kwargs):
-#         data = {
-#              'form', BusinessPermitForm(True, request.GET or None, instance=)
-#         }
-#         pdf = render_to_pdf('pdf/invoice.html', data)
-#         return HttpResponse(pdf, content_type='application/pdf')
+
+@login_required
+def confirm_certificate(request, pk):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+    
+    instance = get_object_or_404(BusinessPermit, pk=pk)
+    instance.status = Status.FOR_ISSUANCE
+    instance.processing_fee = request.POST.get('processing_fee', 0)
+    instance.business_permit_fee = request.POST.get('business_permit_fee', 0)
+    instance.sticker_fee = request.POST.get('sticker_fee', 0)
+    instance.save()
+
+    return redirect_with_params('system:index', status='3')
+
+
+def redirect_with_params(viewname, **kwargs):
+    """
+    Redirect a view with params
+    """
+    rev = reverse(viewname)
+
+    params = urllib.parse.urlencode(kwargs)
+    if params:
+        rev = '{}?{}'.format(rev, params)
+
+    return HttpResponseRedirect(rev)

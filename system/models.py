@@ -3,6 +3,7 @@ from django.urls import reverse
 from authentication.models import CustomUser
 import random
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
 GENDER = ('Male', 'Female')
 
@@ -25,6 +26,28 @@ def generate_bfp_no() -> str:
         uid = str(uid[0]).zfill(9)
         existing_object = BusinessPermit.objects.filter(bfp_tracking_no=uid).first()
     return f'BFP-{uid}'
+
+def generate_business_identification_no() -> str:
+    # BP-2023-7990613451
+    uid = None
+    existing_object = BusinessPermit.objects.all().first()
+    while existing_object is not None or uid is None:
+        uid = random.sample(range(1, 9999999999), 1)
+        uid = str(uid[0]).zfill(9)
+        existing_object = BusinessPermit.objects.filter(business_identification_no=uid).first()
+    return f'BP-{timezone.now().year}-{uid}'
+
+
+def generate_original_receipt_no() -> str:
+    # OR-NO-4004994909
+    uid = None
+    existing_object = BusinessPermit.objects.all().first()
+    while existing_object is not None or uid is None:
+        uid = random.sample(range(1, 9999999999), 1)
+        uid = str(uid[0]).zfill(9)
+        existing_object = BusinessPermit.objects.filter(original_receipt_no=uid).first()
+    return f'OR-NO-{uid}'
+
 
 def generate_form_control_no() -> str:
     # FRM-114835273796
@@ -294,6 +317,10 @@ class BusinessPermit(models.Model):
 
     inspection_date = models.DateField(auto_now=True, blank=True, null=True)
 
+    processing_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
+    business_permit_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
+    sticker_fee = models.PositiveIntegerField(default=0, null=True, blank=True)
+
     owners_gender = models.PositiveSmallIntegerField(
         choices=Gender.choices,
         default=Gender.MALE
@@ -301,6 +328,10 @@ class BusinessPermit(models.Model):
 
     deny_reason = models.CharField(max_length=30, blank=True, default='')
     deny_remarks = models.CharField(max_length=200, blank=True, default='')
+
+    date_of_issuance = models.DateField(null=True, blank=True)
+    business_identification_no = models.CharField(unique=True, default=generate_business_identification_no, max_length=18)
+    original_receipt_no = models.CharField(unique=True, default=generate_original_receipt_no, max_length=16)
 
     def get_absolute_url(self):
         return reverse('system:detail', kwargs={'pk': str(self.pk)})

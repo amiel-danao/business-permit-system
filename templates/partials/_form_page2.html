@@ -90,7 +90,7 @@
             <h4>Map Sketch</h4>
         
             <div class="col-12">
-                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here" src="{% if form.sketch_image %}{{ form.sketch_image.url }}{% else %}{{ form.sketch_image.value }}{% endif %}">
+                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here" src="{% if form.instance.sketch_image %}{{ form.instance.sketch_image.url }}{% endif %}">
             </div>
         </label>
         <input type="file" name="sketch_image" class="form-control d-none" id="sketch_image" accept="image/jpeg, image/png, image/jpg"/>

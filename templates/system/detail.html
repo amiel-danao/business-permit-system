@@ -10,6 +10,7 @@
 {% bootstrap_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% if form.instance.status == 1 %}
 <style>
     /* .form-select{
         -webkit-appearance: none !important;
@@ -83,6 +84,7 @@
 
      
 </style>
+{% endif %}
 {% endblock mycss %}
 
 {% block content %}
@@ -123,58 +125,71 @@
                                     <button onclick="downloadPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
                                 </div>
                             {% endif %}
-
-
-                             {% if request.user.is_superuser %}
-                                {% if form.instance.status == 1 %}
-                                    <p>Submitted Business Requirements:</p>
-                                    
-                                    <ul class="pl-4">
-                                        {% if form.barangay_business_clearance.value %}
-                                            <li><a href="{{ barangay_business_clearance.value.url }}">Barangay Clearance</a></li>
-                                        {% endif %}
-                                        {% if form.proof_of_business_name_registration.value %}
-                                            <li><a href="{{ proof_of_business_name_registration.value.url }}">Business Name Registration</a></li>
-                                        {% endif %}
-                                        {% if form.community_tax_certificate.value %}
-                                            <li><a href="{{ community_tax_certificate.value.url }}">Community Tax Certificate</a></li>
-                                        {% endif %}
-                                    </ul>
-                                    <hr>
-
-                                    <div class="col-3 collapse show multi-collapsed" id="acceptButton">
-                                        <a href="{% url 'system:approve' pk=form.instance.pk %}" type="button" class="btn btn-success">Approve Application</a>
-                                    </div>
-                                    <div class="col-3 collapse show multi-collapsed">
-                                        <a href="#" type="button" class="btn btn-danger"  data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Deny Application</a>
-                                    </div>
-                                    <div class="col-4 collapse multi-collapsed" id="denyForm">
-                                        <form class="form" method="post" action="{% url 'system:reject' pk=form.instance.pk %}">
-                                            {% csrf_token %}
-                                            <div class="mb-3">
-                                                <label for="reason_reject">Reason</label>
-                                                <input name="deny_reason" type="text" class="form-control" placeholder="No reason" id="reason_reject" required>
-                                                
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="remarks_reject">Remarks</label>
-                                                <textarea name="deny_remarks" placeholder="Remarks" id="remarks_reject" rows="4" cols="50" required></textarea>
-                                                
-                                            </div>
-
-                                            <button type="submit" class="btn btn-success">Submit</button>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Cancel</button>
-                                        </form>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
                         </div>
 
                     </form>
+
+                    <div class="row">
+                        {% if request.user.is_superuser %}
+                        {% if form.instance.status == 1 %}
+                        <p>Submitted Business Requirements:</p>
+                        
+                        <ul class="pl-4">
+                            {% if form.barangay_business_clearance.value %}
+                                <li><a target="_blank" href="{{ form.barangay_business_clearance.value.url }}">Barangay Clearance</a></li>
+                            {% endif %}
+                            {% if form.proof_of_business_name_registration.value %}
+                                <li><a target="_blank" href="{{ form.proof_of_business_name_registration.value.url }}">Business Name Registration</a></li>
+                            {% endif %}
+                            {% if form.community_tax_certificate.value %}
+                                <li><a target="_blank" href="{{ form.community_tax_certificate.value.url }}">Community Tax Certificate</a></li>
+                            {% endif %}
+                        </ul>
+                        <hr>
+
+
+
+                        <div class="col-12">
+                            <form class="form" method="post" action="{% url 'system:approve' pk=form.instance.pk %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-3 collapse show multi-collapsed" id="acceptButton">
+                                        <button type="submit" class="btn btn-success">Approve Application</button>
+                                    </div>
+                                    <div class="col-3 collapse show multi-collapsed">
+                                        <button type="button" class="btn btn-danger"  data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Deny Application</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form class="form" method="post" action="{% url 'system:reject' pk=form.instance.pk %}">
+                                {% csrf_token %}
+                                
+                                <div class="col-4 collapse multi-collapsed" id="denyForm">
+                                    <div class="mb-3">
+                                        <label for="reason_reject">Reason</label>
+                                        <input name="deny_reason" type="text" class="form-control" placeholder="No reason" id="reason_reject" required>
+                                        
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="remarks_reject">Remarks</label>
+                                        <textarea name="deny_remarks" placeholder="Remarks" id="remarks_reject" rows="4" cols="50" required></textarea>
+                                        
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
                 </div>
             </div>
-            {% endif %}
+        </div>
+        {% endif %}
 
             {% if form and form.instance.status == 2 %}
                 {% include 'partials/_deny_view.html' %}
@@ -182,8 +197,12 @@
             
             {% if form and form.instance.status == 3 %}
             <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
-                    For Issuance
+                {% include 'partials/_certificate.html' %}
             </div>
+            {% endif %}
+
+            {% if form and form.instance.status == 4 %}
+                {% include 'partials/_permit.html' %}
             {% endif %}
         </div>
     </div>
@@ -195,22 +214,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
     <script type="text/javascript">
-        function downloadPDF2() {
-            var element = document.getElementById('page1Div');
-            var opt = {
-                margin:       0,
-                filename:     'myfile.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { dpi: 96, scale: 0.22, letterRendering: true},
-                jsPDF:        { unit: 'mm', format: [215.9, 330.2], orientation: 'portrait' }
-            };
-
-            // New Promise-based usage:
-            html2pdf().set(opt).from(element).save();
-        }
+        
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             $('#page2Buttons').hide();
@@ -279,7 +286,7 @@
         }
     </script>
 
-    
+    {% if form and form.instance.status == 1 %}
     <script type="text/javascript">
         let transaction_type = $(`option[value="${$('#id_transaction_type').val()}"]`).text();
         $('#id_transaction_type').replaceWith(`<p id="id_transaction_type">${transaction_type}</p>`);
@@ -322,6 +329,7 @@
         }
 
     </script>
+    {% endif %}
 {% endblock %}
 
 

@@ -1,0 +1,137 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid p-4 bg-white">
+    <div class="row">
+        <div class="p-2 col-8 offset-2">
+            <img class="img-fluid form-logo float-end" src="{% static 'img/logo.png' %}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h2 class="text-center mb-4">Certification of request</h2>
+            <p>This division takes charge in receiving, recording and maintains systematic filing of business permits (new, renewal and amendment) and other documents, verifies application for business permit from the database, issues Certified True Copies of permit and Certifications upon request of the taxpayer, and receives inspection /violation report from the Inspection Division and forwards to Administrative Staff for appropriate action.</p>
+            <p class="fw-bold">Issuance of Certification or Certified True Copy of Business Permit </p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-8 offset-2">
+            <div class="row">
+                <div class="col border border-dark fw-bold">
+                    Office or Division
+                </div>
+                <div class="col border border-dark">
+                    BPLD Records and Statistics Division
+                </div>
+            </div>
+            <div class="row">
+                <div class="col border border-dark fw-bold">
+                    Classification
+                </div>
+                <div class="col border border-dark">
+                    External Service
+                </div>
+            </div>
+            <div class="row">
+                <div class="col border border-dark fw-bold">
+                    Type of Transaction
+                </div>
+                <div class="col border border-dark">
+                    Issuance of Certification or Certified True Copy of Business Permit
+                </div>
+            </div>
+            <div class="row">
+                <div class="col border border-dark fw-bold">
+                    Who may Avail
+                </div>
+                <div class="col border border-dark">
+                    Taxpayer who requestts for Certificattion or Certified True Copy of Business Permit
+                </div>
+            </div>
+            <div class="row">
+                <div class="col border border-dark fw-bold text-center">
+                    Checklist of Requirements
+                </div>
+                <div class="col border border-dark fw-bold text-center">
+                    Where to Secure
+                </div>
+            </div>
+            <div class="row">
+                <div class="col border border-dark">
+                    <div class="row">
+                        <div class="col border border-dark">
+                        Any valid ID of Owner
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col border border-dark">
+                        Any valid ID of the representative together with valid ID of owner, if a representative
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col border border-dark">
+                        Authorization letter, if a representative
+                        </div>
+                    </div>
+                </div>
+                <div class="col border border-dark d-flex align-items-center">
+                    <p>Provided by the requesting party</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <div class="row">
+                <div class="col border border-dark fw-bold">
+                    Reference No
+                </div>
+                <div class="col border border-dark fw-bold">
+                    {{ form.instance.reference_no }}
+                </div>
+            </div>
+
+            <form class="form" method="post" action="{% url 'system:confirm-certificate' pk=form.instance.pk %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col border border-dark fw-bold">
+                        Processing Fee
+                    </div>
+                    <div class="col border border-dark fw-bold">
+                        <div class="input-group">
+                            <span class="input-group-text">₱</span>
+                            <input type="number" name="processing_fee" value="{{ form.instance.processing_fee }}" min="0" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col border border-dark fw-bold">
+                        Business Permit Fee
+                    </div>
+                    <div class="col border border-dark fw-bold">
+                        <div class="input-group">
+                            <span class="input-group-text">₱</span>
+                            <input type="number" name="business_permit_fee" value="{{ form.instance.business_permit_fee }}" min="0" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col border border-dark fw-bold">
+                        Sticker Fee
+                    </div>
+                    <div class="col border border-dark fw-bold">
+                        <div class="input-group">
+                            <span class="input-group-text">₱</span>
+                            <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn btn-success">Confirm to Print Business Permit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

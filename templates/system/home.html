@@ -191,7 +191,6 @@
         const applicant_image = document.querySelector("#applicant_image_thumbnail");
 
         if (image_file_input != undefined){
-            applicant_image.src = applicant_picture.value;
             image_file_input.addEventListener("change", function() {
 
                 const reader = new FileReader();
@@ -212,16 +211,12 @@
         const sketch_image = document.querySelector("#sketch_picture");
 
         if (sketch_file_input != undefined){
-            sketch_image.src = applicant_picture.value;
             sketch_file_input.addEventListener("change", function() {
 
                 const reader = new FileReader();
 
                 reader.addEventListener("load", () => {
                     sketch_image.src = reader.result;
-                    // sketch_image.parentNode.parentNode.parentNode.classList.remove("placeholder-glow");
-                    // sketch_image.parentNode.parentNode.classList.remove("bg-dark");
-                    // sketch_image.parentNode.classList.remove("placeholder");
                 });
 
                 reader.readAsDataURL(this.files[0]);

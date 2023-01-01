@@ -9,6 +9,7 @@ from system.models import BusinessType
 
 
 PHONE_NUMBER_ATTRS = {'pattern': '[0][0-9]{10}', 'maxlength': '11'}
+FILE_DOCUMENT_ONLY = 'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'
 
 class BusinessPermitForm(forms.ModelForm):
     business_contact_no = forms.CharField(widget=forms.TextInput(attrs=PHONE_NUMBER_ATTRS), label='Contact No.')
@@ -54,10 +55,17 @@ class BusinessPermitForm(forms.ModelForm):
         required = True,
     )
 
+    barangay_business_clearance = forms.FileField(widget=forms.FileInput(attrs={'accept': FILE_DOCUMENT_ONLY}), required=False)
+    proof_of_business_name_registration = forms.FileField(widget=forms.FileInput(attrs={'accept': FILE_DOCUMENT_ONLY}), required=False)
+    community_tax_certificate = forms.FileField(widget=forms.FileInput(attrs={'accept': FILE_DOCUMENT_ONLY}), required=False)
+
+
     class Meta:
         model = BusinessPermit
         fields = '__all__'
-        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no', 'deny_reason', 'deny_remarks')
+        exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no', 
+                    'deny_reason', 'deny_remarks', 'processing_fee', 'business_permit_fee', 'sticker_fee',
+                    'date_of_issuance', 'business_identification_no', 'original_receipt_no')
         
 
     def __init__(self, read_only=False, *args, **kwargs):
@@ -121,6 +129,11 @@ class BusinessPermitForm(forms.ModelForm):
         self.fields['fire_safety_inspection_clearance_verified_by'].label = False
         self.fields['police_clearance_verified_by'].label = False
         self.fields['others_clearance_verified_by'].label = False
+
+        # self.fields['processing_fee'].label = False
+        # self.fields['business_permit_fee'].label = False
+        # self.fields['sticker_fee'].label = False
+        
         
         
         
