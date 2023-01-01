@@ -26,10 +26,6 @@
         font-size: 0.68rem;
     }
 
-    small, label, span, p, h1{
-        letter-spacing: 0.04px;
-    }
-
     .form-check-inline{
         margin-right: 0px !important;
     }
@@ -46,8 +42,46 @@
         text-transform: uppercase;
         font-size: 0.6rem !important;
         color:black;
-        /* opacity: 0.5; */
     }
+
+    small, label, span, p, h1{
+        letter-spacing: 0.04px;
+    }
+
+    .form-control{
+        padding-top:0.9rem !important;
+        padding-bottom:0px !important;
+        /* height: 30px !important; */
+        /* height:calc(100% - 18px) !important; */
+        height: calc(2.2rem + 2px) !important;
+        font-size: 12.8px !important;/*0.8rem;*/
+        line-height: 1 !important;
+        /* letter-spacing: 0.01px; */
+     }
+
+     td .form-control{
+        padding-top:0.1rem !important;
+     }
+
+     .form-control-plaintext, .col-form-label, .activities-label p{
+        font-size: 0.8rem !important;
+        padding-top:0px !important;
+        padding-bottom:4px !important;
+        margin-bottom: 0px !important;
+     }
+
+    #page2Div .input-group-text, .activities-label, #page2Div input{
+        font-size: 0.8rem !important;
+        height: calc(1.8rem + 2px) !important;
+        line-height: 1.25 !important;
+        padding-bottom: 0px !important;
+    }
+
+    /* .form-floating label{
+        transform: scale(.85) translateY(-15px) translateX(.15rem) !important;
+    } */
+
+     
 </style>
 {% endblock mycss %}
 
@@ -91,6 +125,7 @@
                         <div class="row" id="page2Buttons">
                             <div class="col-3">
                                 <button onclick="downloadPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
+                                <!-- <a href="{% url 'system:permit-download' pk=form.instance.pk %}" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></a> -->
                             </div>
                         </div>
 
@@ -153,13 +188,20 @@
                     doc.save("output.pdf");
                     $('#page2Buttons').show();
                 },
-                x: 8,
-                y: 7,
-                html2canvas: { scale: 0.22, 
-                    // letterRendering: true, 
-                    // width: 1080, height: 1080
+                x: 12,
+                y: 0,
+                html2canvas: {
+                    scale: 0.21, 
+                    // foreignObjectRendering: true,
+                    onclone: function(document) {
+                        // document.querySelector('.form-floating label').style.transform = 'scale(.85) translateY(-2rem) translateX(.15rem) !important';
+                        // .form-floating label{
+                        //     transform: scale(.85) translateY(-2rem) translateX(.15rem) !important;
+                        // }
+                        console.log('cloned!');
+                    }
                 },
-                margin:[7,0,0,0]
+                margin:[2,0,4,0]
             });
         }
     </script>
@@ -195,9 +237,9 @@
 
 
         $('#deed_row').addClass('mt-5');
-        // $('input').each(function(){
-        //     $(this).removeAttr('placeholder');
-        // });
+        $('input').each(function(){
+            $(this).removeAttr('placeholder');
+        });
 
         $('.underlined-input, #fire_inspection_fee, #estimated_capitalization, .to_disable_on_read_only, .form-check-input').each(function( index ) {
             $(this).prop('readonly', true);

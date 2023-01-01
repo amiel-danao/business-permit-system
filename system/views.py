@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required as login_required
 from django.views.generic import ListView
 from system.filters import BusinessPermitFilter
@@ -15,6 +15,14 @@ from django_tables2.config import RequestConfig
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.http import HttpResponse
+from django.views.generic import View
+from xhtml2pdf import pisa
+
+
 
 
 @login_required
@@ -82,3 +90,45 @@ class BusinessPermitDetailView(FormMixin, DetailView):
         context['form'] = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
         context['read_only'] = True
         return context
+
+
+def render_to_pdf2(request, pk):
+    instance = get_object_or_404(BusinessPermit, pk=pk)
+    context_dict = {'form': BusinessPermitForm(True, request.GET or None, instance=instance)}
+    template = get_template('system/detail.html')
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode('utf-8')), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
+def render_to_pdf(request, pk):
+    instance = get_object_or_404(BusinessPermit, pk=pk)
+    context = {'form': BusinessPermitForm(True, request.GET or None, instance=instance)}
+    template_path = 'system/detail.html'
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
+# class GeneratePdf(View):
+#     def get(self, request, *args, **kwargs):
+#         data = {
+#              'form', BusinessPermitForm(True, request.GET or None, instance=)
+#         }
+#         pdf = render_to_pdf('pdf/invoice.html', data)
+#         return HttpResponse(pdf, content_type='application/pdf')

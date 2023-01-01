@@ -223,11 +223,7 @@ table tr .column-label, #table_verification_documents td, #table_verification_do
         background-color: inherit;
     }
 
-    .form-control {
-        height: 28px !important;
-        font-size: 0.8rem;
-        letter-spacing: 0.01px;
-     }
+    
 
      .bpls-form-header p{
         font-size: 0.8rem !important;

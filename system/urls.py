@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
-from system.views import BusinessPermitListView, BusinessPermitCreateView, BusinessPermitDetailView
+from system.views import BusinessPermitListView, BusinessPermitCreateView, BusinessPermitDetailView, render_to_pdf
 from django.urls import re_path
 from django.conf import settings
 from django.conf.urls.static import static
@@ -13,5 +13,5 @@ urlpatterns = [
     path('permit/create/', BusinessPermitCreateView.as_view(), name='create'),
     # path('permit/detail/', BusinessPermitDetailView.as_view(), name='detail'),
     path('permit/detail/<int:pk>/', BusinessPermitDetailView.as_view(), name="detail"),
-    # path('permit_download/<int:pk>/', DownloadView.as_view(), name='permit-download')
+    path('permit_download/<int:pk>/', render_to_pdf, name='permit-download')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
