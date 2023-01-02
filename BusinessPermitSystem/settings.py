@@ -105,7 +105,7 @@ else:
             "ENGINE": "django.db.backends.mysql",
             "NAME": "bpls$bpls_database",
             "USER": "bpls",
-            "PASSWORD": "notcommonpassword1234",
+            "PASSWORD": "notCommonPassword123$",
             "HOST": "bpls.mysql.pythonanywhere-services.com",
             "PORT": "3306",
             'OPTIONS': {
