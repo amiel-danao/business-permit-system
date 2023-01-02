@@ -333,6 +333,10 @@ class BusinessPermit(models.Model):
     business_identification_no = models.CharField(unique=True, default=generate_business_identification_no, max_length=18)
     original_receipt_no = models.CharField(unique=True, default=generate_original_receipt_no, max_length=16)
 
+    mayor_full_name = models.CharField(default='Mildred Joy P. Que', max_length=50, blank=False)
+    mayor_signature = models.ImageField(upload_to='signatures/', blank=True, null=True, max_length=100, default='signatures/signature.png')
+    
+
     def get_absolute_url(self):
         return reverse('system:detail', kwargs={'pk': str(self.pk)})
 

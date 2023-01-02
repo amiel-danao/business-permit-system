@@ -1,16 +1,16 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<div class="container-fluid p-4">
+<div class="container-fluid p-5">
     <div class="row">
-        <div class="col-10 offset-1 bg-white" id="businessPermitDiv">
+        <div class="col-12 px-5 bg-white" id="businessPermitDiv">
             <div class="row">
-                <div class="p-2 col-10 offset-1 text-center">
+                <div class="p-2 text-center">
                     <img class="img-fluid form-logo" src="{% static 'img/logo.png' %}">
                 </div>
             </div>
             <div class="row mb-5">
-                <div class="col-10 offset-1 text-center">
+                <div class=" text-center">
                     <h6 class="mb-2">Republic of the Philippines</h6>
                     <p class="mb-0">Province of Leyte</p>
                     <p>Municipality of Dulag</p>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="row">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <p class="mb-2 fw-bold text-uppercase h5">Office of the Mayor</p>
                     <p>Business Permit and Licensing Office</p>
                     <h1 class="fw-bolder text-danger text-uppercase">Business Permit</h1>
@@ -26,40 +26,40 @@
             </div>
 
             <div class="row mb-5">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <div class="mb-2 text-uppercase">Permit No. : <p class="text-white bg-secondary p-2" style="display: inline;">{{ form.instance.business_identification_no }}</p></div>
                 </div>
             </div>
 
             <div class="row mt-5">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <h1 class="text-uppercase text-decoration-underline fw-bolder mb-0">{{ form.instance.business_name }}</h1>
                     <p>Business Name</p>
                 </div>
             </div>
 
             <div class="row mt-5">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <p>This permit may be revoked anytime when necessary to protect the public interest or for violation of any of the provisions of our existing laws, ordinance, rules and regulations governing the operation and maintenance of the same.</p>
                 </div>
             </div>
             
 
             <div class="row mb-4">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <p class="fw-bold">Signed and sealed this {{ form.instance.date_of_issuance|date:"jS \o\f F Y" }} at Dulag, Leyte.</p>
                 </div>
             </div>
 
             <div class="row mb-4">
-                <div class="col-10 offset-1 text-end">
+                <div class="text-end">
                     <div class="mb-2 text-uppercase">OR No. : <p class="text-white bg-secondary p-1" style="display: inline;">{{ form.instance.original_receipt_no }}</p></div>
                     <div class="mb-2 text-uppercase">Date of issue : <p class="text-white bg-secondary p-1" style="display: inline;">{{ form.instance.date_of_issuance|date:"F d, Y" }}</p></div>
                     <div class="mb-2 text-uppercase">Amount : <p class="text-white bg-secondary p-1" style="display: inline;">PHP{{ form.instance.processing_fee|add:form.instance.business_permit_fee|add:form.instance.sticker_fee }}</p></div>
                 </div>
             </div>
             <div class="row mt-4 pb-5">
-                <div class="col-10 offset-1 text-center">
+                <div class="text-center">
                     <img class="img-fluid w-25" src="{% static 'img/signature.png' %}" style="transform: translateY(35px);">
                     <p class="text-uppercase text-decoration-underline fw-bolder mb-0">HON. JOHN DOE</p>
                     <small>Municipal Mayor</small>

@@ -1,7 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<div class="container-fluid p-4 bg-white">
+<div class="container-fluid p-4 bg-white" id="certificateDIV">
     <div class="row">
         <div class="p-2 col-8 offset-2">
             <img class="img-fluid form-logo float-end" src="{% static 'img/logo.png' %}">
@@ -100,8 +100,12 @@
                     </div>
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
-                            <span class="input-group-text">₱</span>
+                            <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
+                            {% if form.instance.status == 5 %}
+                            <input type="number" name="processing_fee" value="{{ form.instance.processing_fee }}" min="0" class="form-control-plaintext" required readonly>
+                            {% else %}
                             <input type="number" name="processing_fee" value="{{ form.instance.processing_fee }}" min="0" class="form-control" required>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -111,8 +115,12 @@
                     </div>
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
-                            <span class="input-group-text">₱</span>
+                            <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
+                            {% if form.instance.status == 5 %}
+                            <input type="number" name="business_permit_fee" value="{{ form.instance.business_permit_fee }}" min="0" class="form-control-plaintext" required readonly>
+                            {% else %}
                             <input type="number" name="business_permit_fee" value="{{ form.instance.business_permit_fee }}" min="0" class="form-control" required>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -122,16 +130,26 @@
                     </div>
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
-                            <span class="input-group-text">₱</span>
-                            <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control" required>
+                            <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
+                            {% if form.instance.status == 5 %}
+                            <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control-plaintext" required readonly>
+                            {% else %}
+                            <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control" required >
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {% if form.instance.status != 5 %}
+                <div class="row" data-html2canvas-ignore="true">
                     <button type="submit" class="btn btn-success">Confirm to Print Business Permit</button>
                 </div>
+                {% endif %}
             </form>
         </div>
     </div>
 
+</div>
+
+<div class="col-12 mb-5 pb-5 text-center">
+    <button onclick="downloadPDF('#certificateDIV', 'certificate-of-request')" type="button" class="btn btn-primary">Print Certificate <i class="bi bi-printer"></i></button>
 </div>

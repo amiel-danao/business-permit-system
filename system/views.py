@@ -24,6 +24,7 @@ from xhtml2pdf import pisa
 from django.db.models import Q
 import urllib
 from django.utils import timezone
+from django.core.mail import send_mail
 
 
 @login_required
@@ -103,10 +104,8 @@ class BusinessPermitDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BusinessPermitDetailView, self).get_context_data(**kwargs)
-        form = None
-        if self.object.status != Status.ISSUED:
-            form = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
-            context['form'] = form
+        form = BusinessPermitForm(True, self.request.POST or None, self.request.FILES or None, instance=self.object)
+        context['form'] = form
         context['read_only'] = True
         context['page_status'] = form.instance.status
         return context
@@ -121,6 +120,13 @@ def reject_application(request, pk):
     instance.deny_reason = request.POST.get('deny_reason', '')
     instance.deny_remarks = request.POST.get('deny_remarks', '')
     instance.save()
+    send_mail(
+        'Business Permit - Process Update',
+        compose_email(instance),
+        request.user.email,
+        [instance.user.email,],
+        fail_silently=False,
+    )
     return redirect_with_params('system:index', status='2')
 
 
@@ -131,6 +137,13 @@ def approve_application(request, pk):
     instance = get_object_or_404(BusinessPermit, pk=pk)
     instance.status = Status.FOR_ASSESSMENT_OF_FEES
     instance.save()
+    send_mail(
+        'Business Permit - Process Update',
+        compose_email(instance),
+        request.user.email,
+        [instance.user.email,],
+        fail_silently=False,
+    )
     return redirect_with_params('system:index', status='1')
 
 
@@ -146,8 +159,89 @@ def confirm_certificate(request, pk):
     instance.sticker_fee = request.POST.get('sticker_fee', 0)
     instance.date_of_issuance = timezone.now()
     instance.save()
-
+    send_mail(
+        'Business Permit - Process Update',
+        compose_email(instance),
+        request.user.email,
+        [instance.user.email,],
+        fail_silently=False,
+    )
     return redirect_with_params('system:index', status='3')
+
+
+@login_required
+def confirm_issuance(request, pk):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+    
+    instance = get_object_or_404(BusinessPermit, pk=pk)
+    instance.status = Status.ISSUED
+    instance.save()
+    send_mail(
+        'Business Permit - Process Update',
+        compose_email(instance),
+        request.user.email,
+        [instance.user.email,],
+        fail_silently=False,
+    )
+    return redirect_with_params('system:index', status='4')
+
+
+def compose_email(instance):
+    if instance.status == Status.DENIED:
+        return f"""Dear {instance.business_applicant_name},
+
+            We wanted to reach out to you regarding the status of your application form. Unfortunately, we have had to reject your application at this time due to {instance.deny_reason}.
+        [Remarks]
+        {instance.deny_remarks}
+
+        We appreciate your interest and encourage you to apply again in the future, should a suitable opportunity arise. In the meantime, please don't hesitate to reach out if you have any questions or concerns.
+
+        Thank you for your interest and we wish you the best of luck in your business.
+
+        Sincerely,
+        Dulag Leyte, Processing Staff"""
+    elif instance.status == Status.FOR_ASSESSMENT_OF_FEES:
+        return f"""
+            Dear {instance.business_applicant_name},
+
+                I am writing to request approval for a business permit for your company, {instance.business_name}, which will be located at {instance.address}.
+
+            Our staff will further process your application, and we will send another email once it's done.
+
+            Thank you for your interest.
+
+            Sincerely,
+            Dulag Leyte, Processing Staff"""
+    elif instance.status == Status.FOR_ISSUANCE:
+        total = sum([float(instance.processing_fee), float(instance.business_permit_fee), float(instance.sticker_fee)])
+        return f"""
+        Dear {instance.business_applicant_name},
+
+            We are pleased to inform you that your business permit application has been approved.
+            
+        The permit total fee of ₱{total} has been processed and receipted.
+
+        Congratulations on the approval of your business permit, and we look forward to supporting your business as it grows and thrives in our community.
+
+        If you have any questions or need further assistance, please don't hesitate to contact our office.
+
+        Sincerely,
+        Dulag Leyte, Processing Staff"""
+    elif instance.status == Status.ISSUED:
+        f"""
+        Dear {instance.business_applicant_name},
+
+            I am writing to let you know that your business permit is now ready to be printed.
+
+        Thank you for your patience during the review process. We are excited to see your business thrive in our community.
+
+        If you have any questions or need further assistance, please don't hesitate to contact our office.
+
+        Sincerely,
+        Dulag Leyte, Processing Staff"""
+
+    return ""
 
 
 def redirect_with_params(viewname, **kwargs):

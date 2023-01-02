@@ -65,7 +65,8 @@ class BusinessPermitForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('reference_no', 'user', 'owners_gender', 'status', 'bfp_tracking_no', 'form_control_no', 
                     'deny_reason', 'deny_remarks', 'processing_fee', 'business_permit_fee', 'sticker_fee',
-                    'date_of_issuance', 'business_identification_no', 'original_receipt_no')
+                    'date_of_issuance', 'business_identification_no', 'original_receipt_no',
+                    'mayor_full_name', 'mayor_signature')
         
 
     def __init__(self, read_only=False, *args, **kwargs):
