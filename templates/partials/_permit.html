@@ -60,8 +60,8 @@
             </div>
             <div class="row mt-4 pb-5">
                 <div class="text-center">
-                    <img class="img-fluid w-25" src="{% static 'img/signature.png' %}" style="transform: translateY(35px);">
-                    <p class="text-uppercase text-decoration-underline fw-bolder mb-0">HON. JOHN DOE</p>
+                    <img class="img-fluid w-25" src="/{{ form.instance.mayor_signature }}" style="transform: translateY(35px);">
+                    <p class="text-uppercase text-decoration-underline fw-bolder mb-0">{{ form.instance.mayor_full_name }}</p>
                     <small>Municipal Mayor</small>
                     
                 </div>

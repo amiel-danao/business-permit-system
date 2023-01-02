@@ -107,7 +107,7 @@
         <div class="col shadow tab-content" id="v-pills-tabContent">
             
 
-            {% if form and form.instance.status == 1%}
+            {% if form and form.instance.status == 1 or form.instance.status == 3 and not request.user.is_superuser %}
             <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
                 <div class="container p-2">
                     {% if messages %}
@@ -195,10 +195,10 @@
                 {% include 'partials/_deny_view.html' %}
             {% endif %}
             
-            {% if form and form.instance.status == 3 %}
-            <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
-                {% include 'partials/_certificate.html' %}
-            </div>
+            {% if form and request.user.is_superuser and form.instance.status == 3 %}
+                <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+                    {% include 'partials/_certificate.html' %}
+                </div>
             {% endif %}
 
             {% if form and form.instance.status == 4 or form.instance.status == 5%}

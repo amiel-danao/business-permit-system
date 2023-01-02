@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from system.models import DEFAULT_MAYOR_FULL_NAME, DEFAULT_MAYOR_SIGNATURE, Config
+
 
 def global_context(request):
     return {
@@ -8,3 +10,5 @@ def global_context(request):
         'app_abbr': 'BPLS',
         'app_place': 'Dulag'
     }
+
+

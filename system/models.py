@@ -1,11 +1,28 @@
 from django.db import models
 from django.urls import reverse
+from BusinessPermitSystem.settings import MEDIA_URL
 from authentication.models import CustomUser
 import random
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 
 GENDER = ('Male', 'Female')
+DEFAULT_MAYOR_FULL_NAME = 'Mildred Joy P. Que'
+DEFAULT_MAYOR_SIGNATURE = f'{MEDIA_URL}signatures/signature.png'
+
+def get_mayor_full_name() -> str:
+    existing_config = Config.objects.first()
+    if existing_config:
+        return existing_config.mayor_full_name
+    else:
+        return DEFAULT_MAYOR_FULL_NAME
+
+def get_mayor_signature() -> str:
+    existing_config = Config.objects.first()
+    if existing_config:
+        return existing_config.mayor_signature
+    else:
+        return DEFAULT_MAYOR_SIGNATURE
 
 def generate_ref_no() -> str:
     #REF-546200971
@@ -116,9 +133,9 @@ class BusinessPermit(models.Model):
 
     transaction_date = models.DateField(auto_now=True)
 
-    barangay_business_clearance = models.FileField(upload_to ='requirements/%Y/%m/%d/', blank=True)
-    proof_of_business_name_registration = models.FileField(upload_to ='requirements/%Y/%m/%d/', blank=True)
-    community_tax_certificate = models.FileField(verbose_name="Community Tax Certificate(Cedula)", upload_to ='requirements/%Y/%m/%d/', blank=True)
+    barangay_business_clearance = models.FileField(upload_to =f'{MEDIA_URL[1:]}requirements/%Y/%m/%d/', blank=True)
+    proof_of_business_name_registration = models.FileField(upload_to =f'{MEDIA_URL[1:]}requirements/%Y/%m/%d/', blank=True)
+    community_tax_certificate = models.FileField(verbose_name="Community Tax Certificate(Cedula)", upload_to =f'{MEDIA_URL[1:]}requirements/%Y/%m/%d/', blank=True)
 
     business_contact_no = models.CharField(verbose_name="Contact No.", max_length=11, default="", blank=True)
 
@@ -234,8 +251,8 @@ class BusinessPermit(models.Model):
     business_applicant_name = models.CharField(max_length=50, blank=False, default='')
     business_applicant_day = models.CharField(max_length=20, blank=False, default='1')
     business_applicant_year = models.CharField(max_length=30, blank=False, default='1')
-    applicant_picture = models.ImageField(upload_to='applicants/', blank=True, null=True, max_length=100)
-    sketch_image = models.ImageField(upload_to='sketches/', blank=True, null=True, max_length=100)
+    applicant_picture = models.ImageField(upload_to=f'{MEDIA_URL[1:]}applicants/', blank=True, null=True, max_length=100)
+    sketch_image = models.ImageField(upload_to=f'{MEDIA_URL[1:]}sketches/', blank=True, null=True, max_length=100)
 
     bfp_tracking_no = models.CharField(blank=False, unique=True, default=generate_bfp_no, max_length=26)
 
@@ -333,12 +350,16 @@ class BusinessPermit(models.Model):
     business_identification_no = models.CharField(unique=True, default=generate_business_identification_no, max_length=18)
     original_receipt_no = models.CharField(unique=True, default=generate_original_receipt_no, max_length=16)
 
-    mayor_full_name = models.CharField(default='Mildred Joy P. Que', max_length=50, blank=False)
-    mayor_signature = models.ImageField(upload_to='signatures/', blank=True, null=True, max_length=100, default='signatures/signature.png')
-    
+    mayor_full_name = models.CharField(default=get_mayor_full_name, max_length=50, blank=False)
+    mayor_signature = models.ImageField(upload_to=f'{MEDIA_URL[1:]}signatures/', blank=True, null=True, max_length=100, default=get_mayor_signature)
 
     def get_absolute_url(self):
         return reverse('system:detail', kwargs={'pk': str(self.pk)})
 
     def __str__(self):
         return self.reference_no
+
+
+class Config(models.Model):
+    mayor_full_name = models.CharField(default=DEFAULT_MAYOR_FULL_NAME, max_length=50, blank=False)
+    mayor_signature = models.ImageField(upload_to=f'{MEDIA_URL[1:]}signatures/', blank=True, null=True, max_length=100, default=DEFAULT_MAYOR_SIGNATURE)
