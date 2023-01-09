@@ -84,13 +84,11 @@
 
     <p class="fs-6">Important Notice: As per Section 12 of the implementing Rules and Regulations of the Fire Code of 2018, certain establishment (e.g building lessers, fire, earthquake, and explosion hazard insurance companies and vendors of firefighting equipment, appliance and devices) may be required to pay addittional charges and fees other than the Fire Safety Inspection Fees. Theses shall be collected during inspections or in another process to be communicated by representatives of the Bureau of Fire Protection (BFP).</p>
 
-    
+    <h4>Map Sketch</h4>
     <div class="row bordered-section" style="height:250px;">
         <label for="sketch_image">
-            <h4>Map Sketch</h4>
-        
             <div class="col-12">
-                <img class="img-fluid" id="sketch_picture" alt="Upload Sketch Image Here" src="{% if form.instance.sketch_image %}{{ form.instance.sketch_image.url }}{% endif %}">
+                <img class="img-fluid" style="max-height:250px;" id="sketch_picture" alt="Upload Sketch Image Here" src="{% if form.instance.sketch_image %}{{ form.instance.sketch_image.url }}{% endif %}">
             </div>
         </label>
         <input type="file" name="sketch_image" class="form-control d-none" id="sketch_image" accept="image/jpeg, image/png, image/jpg"/>

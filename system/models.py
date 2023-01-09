@@ -249,8 +249,8 @@ class BusinessPermit(models.Model):
     government_entity = models.BooleanField(default=False)
 
     business_applicant_name = models.CharField(max_length=50, blank=False, default='')
-    business_applicant_day = models.CharField(max_length=20, blank=False, default='1')
-    business_applicant_year = models.CharField(max_length=30, blank=False, default='1')
+    business_applicant_day = models.PositiveIntegerField(blank=False, default=timezone.now().day)
+    business_applicant_year = models.CharField(max_length=30, blank=False, default='year')
     applicant_picture = models.ImageField(upload_to=f'{MEDIA_URL[1:]}applicants/', blank=True, null=True, max_length=100)
     sketch_image = models.ImageField(upload_to=f'{MEDIA_URL[1:]}sketches/', blank=True, null=True, max_length=100)
 
