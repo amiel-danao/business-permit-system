@@ -237,3 +237,7 @@ table tr .column-label, #table_verification_documents td, #table_verification_do
         text-decoration: none;
         color:inherit !important;
      }
+
+     .flatpickr-input{
+        background-color: #fff !important;
+     }
