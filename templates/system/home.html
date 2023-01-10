@@ -10,6 +10,7 @@
 {% bootstrap_css %}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="{% static 'css/home.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 {% endblock mycss %}
 
 {% block content %}
@@ -154,7 +155,25 @@
     <button onclick="topFunction()" id="toTopBtn" title="Go to top"><i class="bi bi-chevron-double-up"></i></button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $(`input[name="barangay_business_clearance_date"]`).datepicker();
+            $(`input[name="location_zoning_clearance_date"]`).datepicker();
+            $(`input[name="health_clearance_date"]`).datepicker();
+            $(`input[name="occupancy_permit_clearance_date"]`).datepicker();
+            $(`input[name="fire_safety_inspection_clearance_date"]`).datepicker();
+            $(`input[name="police_clearance_date"]`).datepicker();
+            $(`input[name="others_clearance_date"]`).datepicker();
+
+            $(`input[name="fire_safety_date"]`).datepicker();
+            $(`input[name="time_date_received"]`).datepicker();
+            $(`input[name="inspection_date"]`).datepicker();
+            
+        });
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function($) {
             $(".records-table tr").click(function() {
