@@ -162,7 +162,9 @@
         $(document).ready(function($) {
             $('#table_verification_documents :input').each(function() {
                 $(this).attr('readonly', true);
-                $(this).attr('type', 'text');
+                if ($(this).attr('type') != 'radio'){
+                    $(this).attr('type', 'text');
+                }
                 console.log('readonly toggled!');
             });
         });
