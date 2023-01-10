@@ -221,7 +221,7 @@
             <div class="row" id="page2Buttons">
                 {% if request.user.is_superuser and form.instance.status == 4 or form.instance.status == 5 %}
                     <div class="col-12 pb-5 text-center">
-                        <button onclick="downloadPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
+                        <button onclick="printToPDF()" type="button" class="btn btn-primary">Print Business Permit <i class="bi bi-printer"></i></button>
                         {% if request.user.is_superuser and form.instance.status == 4 %}
                         <form class="form" method="post" style="display:inline" action="{% url 'system:confirm-issuance' pk=form.instance.pk %}">
                             {% csrf_token %}
@@ -245,24 +245,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-html2canvas@latest/dist/jspdf-html2canvas.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script type="text/javascript">
 
-        
-        function downloadPDF(divID, fileName) {
+        function printToPDF(divID, fileName){
+            // const {html2PDF} = window.html2PDF;
             const { jsPDF } = window.jspdf;
-            $('#page2Buttons').hide();
-            
-            let options = {
-                orientation: 'p',
-                unit: 'mm',
-                format: 'a4',//[215.9, 330.2],
-                putOnlyUsedFonts:true,
-                floatPrecision: 16 // or "smart", default is 16
-            }
 
-            let doc = new jsPDF(options);
+            $('#page2Buttons').hide();
 
             if (divID == undefined)
                 divID = '#businessPermitDiv';
@@ -270,36 +264,30 @@
                 let business_identificaion_no = $('#form_business_id_no').text();
                 fileName = business_identificaion_no;
             }
-            
-            var pdfjs = document.querySelector(divID);
-            // var page2 = document.getElementById('page2Div');
-            
 
-            // Convert HTML to PDF in JavaScript
-            doc.html(pdfjs, {
-                callback: function(doc) {
-                    
-                    // doc.addPage();
+            var theDivToPrint = $(divID);
+            theDivToPrint.css('min-width', '796px');
+            theDivToPrint.css('max-width', '796px');
 
-                    doc.deletePage(2);
-                    
-                    doc.save(`${fileName}.pdf`);
-                    $('#page2Buttons').show();
+            console.log(theDivToPrint);
+
+            html2PDF(theDivToPrint, {
+                jsPDF: {
+                    format: 'a4'
                 },
-                x: 0,
-                y: 0,
                 html2canvas: {
-                    scale: 0.24, 
-                    // foreignObjectRendering: true,
-                    onclone: function(document) {
-                        // document.querySelector('.form-floating label').style.transform = 'scale(.85) translateY(-2rem) translateX(.15rem) !important';
-                        // .form-floating label{
-                        //     transform: scale(.85) translateY(-2rem) translateX(.15rem) !important;
-                        // }
-                        console.log('cloned!');
-                    }
+                    width:796,
+                    height:1123,
+                    scale:4
                 },
-                // margin:[2,0,4,0]
+                imageType: 'image/jpeg',
+                output: `${fileName}.pdf`,
+                success: function(pdf) {
+                    theDivToPrint.get(0).style.removeProperty('min-width');
+                    theDivToPrint.get(0).style.removeProperty('max-width');
+                    $('#page2Buttons').show();
+                    pdf.save(this.output);                    
+                }
             });
         }
     </script>
