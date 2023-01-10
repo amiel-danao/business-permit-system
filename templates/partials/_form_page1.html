@@ -18,9 +18,13 @@
             <p class="py-0 my-0 underlined">{% now 'Y-m-d' %}</p>
             <small class="align-top">Date</small>
             <p class="py-0 my-0 underlined">{{ form.instance.form_control_no }}</p>
+            <input type="text" name="form_control_no" hidden value="{{ form.instance.form_control_no }}">
             <small class="align-top">Form Control No.</small>
             <p class="py-0 my-0 underlined">{{ form.instance.reference_no }}</p>
+            <input type="text" name="reference_no" hidden value="{{ form.instance.reference_no }}">
             <small class="align-top">Mayor's Business Permit No.</small>
+            <input type="text" name="business_identification_no" hidden value="{{ form.instance.business_identification_no }}">
+            <input type="text" name="original_receipt_no" hidden value="{{ form.instance.original_receipt_no }}">
         </div>
     </div>
 
@@ -558,11 +562,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-3 p-2 {% if not form.instance.applicant_picture %}placeholder-glow{% endif %}">
-                        <div class="d-flex justify-content-center {% if not form.instance.applicant_picture %}placeholder bg-dark{% endif %}">
-                            <label class="form-label text-white m-1" for="applicant_picture"><img class="img-fluid" id="applicant_image_thumbnail" src="{% if form.instance.applicant_picture %}{{ form.instance.applicant_picture.url }}{% else %}{% static 'img/id_picture_placeholder.svg' %}{% endif %}"
+                    <div class="col-3 p-2 {% if not form.instance.applicant_picture %}placeholder-glow{% else %}p-0{% endif %}">
+                        <div class="d-flex justify-content-center {% if not form.instance.applicant_picture %}placeholder bg-dark{% else %}p-0{% endif %}">
+                            <label class="form-label text-white m-1 p-0" for="applicant_picture"><img class="img-fluid" id="applicant_image_thumbnail" src="{% if form.instance.applicant_picture %}{{ form.instance.applicant_picture.url }}{% else %}{% static 'img/id_picture_placeholder.svg' %}{% endif %}"
                                 alt="2x2 I.D Picture"/></label>
-                            <input type="file" name="applicant_picture" class="form-control d-none" id="applicant_picture" accept="image/jpeg, image/png, image/jpg"/>
+                            <input type="file" name="applicant_picture" class="form-control d-none p-0" id="applicant_picture" accept="image/jpeg, image/png, image/jpg"/>
                         </div>
                     </div>
                 </div>
