@@ -150,11 +150,14 @@
 
 
                         <div class="col-12">
-                            <form class="form" method="post" action="{% url 'system:approve' pk=form.instance.pk %}">
+                            <form class="form" method="post" action="{% url 'system:approve' pk=form.instance.pk %}" enctype="multipart/form-data">
                                 {% csrf_token %}
+                                <div id="copyInputContainer"></div>
+                                
+
                                 <div class="row">
                                     <div class="col-3 collapse show multi-collapsed" id="acceptButton">
-                                        <button type="submit" class="btn btn-success">Approve Application</button>
+                                        <button id="approveSubmit" type="submit" class="btn btn-success">Approve Application</button>
                                     </div>
                                     <div class="col-3 collapse show multi-collapsed">
                                         <button type="button" class="btn btn-danger"  data-bs-toggle="collapse" data-bs-target=".multi-collapsed" aria-expanded="false" aria-controls="acceptButton denyForm">Deny Application</button>
@@ -356,6 +359,25 @@
             $('#government_entity_no').prop('checked', true);
         }
 
+    </script>
+    {% endif %}
+
+    {% if request.user.is_superuser%}
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $('#table_verification_documents :input').each(function() {
+                $(this).prop('disabled', false);
+                console.log('readonly toggled!');
+            });
+
+            $('#approveSubmit').click(function(){
+                $('#copyInputContainer').empty();
+                $('#table_verification_documents :input').each(function() {
+                    let newElem = `<input type="text" name="${$(this).attr('name')}" value="${$(this).val()}" hidden>`;
+                    $('#copyInputContainer').append(newElem);
+                });
+            });
+        });
     </script>
     {% endif %}
 {% endblock %}

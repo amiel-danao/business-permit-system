@@ -135,6 +135,10 @@ def approve_application(request, pk):
     if request.method != 'POST':
         return HttpResponseBadRequest()
     instance = get_object_or_404(BusinessPermit, pk=pk)
+    form = BusinessPermitForm(request.POST)
+    for key, value in request.POST.items():
+        if key in form.fields:
+            setattr(instance, key, value)
     instance.status = Status.FOR_ASSESSMENT_OF_FEES
     instance.save()
     send_mail(
