@@ -241,3 +241,12 @@ table tr .column-label, #table_verification_documents td, #table_verification_do
      .flatpickr-input{
         background-color: #fff !important;
      }
+
+     /* input[required]::after {
+        content: '*';
+        color: red !important;
+      } */
+
+      .asteriskField{
+        color: red !important;
+      }

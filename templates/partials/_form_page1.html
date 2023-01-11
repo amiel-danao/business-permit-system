@@ -56,7 +56,7 @@
             <div class="row g-0 my-0 py-0">
                 <div class="col-12 mx-0 px-0">
                     <div class="input-group has-validation">
-                        <span class="input-group-text">Business Trade Name*</span>
+                        <span class="input-group-text">Business Trade Name<span class="asteriskField">*</span></span>
                         <div class="col-7 mx-0 px-0">
                             {% include 'bootstrap5/floating_field.html' with field=form.business_name %}
                         </div>
@@ -364,7 +364,7 @@
         <div class="container">
             <div class="row g-0 my-0 py-0">
                 <div class="col-8 mx-0 p-1 border-right border-dark">
-                    <small class="text-uppercase">Kind of ownership*</small><br>
+                    <small class="text-uppercase">Kind of ownership<span class="asteriskField">*</span></small><br>
                     {% for choice in form.business_type %}
                         <div class="form-check form-check-inline">
                             {{ choice.tag }}
@@ -554,7 +554,7 @@
                                     <br>
                                     <div class="col-8">
                                         <p class="text-uppercase text-center mb-0">Christian Rey L. Villamor</p>
-                                        <small class="text-uppercase text-center mt-0">Chief - BFLG </small>
+                                        <small class="text-uppercase text-center mt-0">Chief - BPLO </small>
                                         <p class="text-uppercase text-center mb-0">A<small>TTY.</small>Mildred Joy Que, CPA</p>
                                         <small class="text-uppercase text-center mt-0">Municipal Mayor</small>
                                     </div>
