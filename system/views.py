@@ -1,3 +1,4 @@
+from smtplib import SMTPDataError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required as login_required
 from django.views.generic import ListView
@@ -138,16 +139,23 @@ def approve_application(request, pk):
     form = BusinessPermitForm(request.POST)
     for key, value in request.POST.items():
         if key in form.fields:
-            setattr(instance, key, value)
+            field = form.fields[key]
+            value_to_set = value
+            if field.widget.input_type == 'date':
+                value_to_set = None if value == '' else value
+            setattr(instance, key, value_to_set)
     instance.status = Status.FOR_ASSESSMENT_OF_FEES
     instance.save()
-    send_mail(
-        'Business Permit - Process Update',
-        compose_email(instance),
-        request.user.email,
-        [instance.user.email,],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            'Business Permit - Process Update',
+            compose_email(instance),
+            request.user.email,
+            [instance.user.email,],
+            fail_silently=False,
+        )
+    except SMTPDataError:
+        pass
     return redirect_with_params('system:index', status='1')
 
 
