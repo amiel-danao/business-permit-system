@@ -121,13 +121,16 @@ def reject_application(request, pk):
     instance.deny_reason = request.POST.get('deny_reason', '')
     instance.deny_remarks = request.POST.get('deny_remarks', '')
     instance.save()
-    send_mail(
-        'Business Permit - Process Update',
-        compose_email(instance),
-        request.user.email,
-        [instance.user.email,],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            'Business Permit - Process Update',
+            compose_email(instance),
+            request.user.email,
+            [instance.user.email,],
+            fail_silently=False,
+        )
+    except SMTPDataError:
+        pass
     return redirect_with_params('system:index', status='2')
 
 
@@ -171,13 +174,16 @@ def confirm_certificate(request, pk):
     instance.sticker_fee = request.POST.get('sticker_fee', 0)
     instance.date_of_issuance = timezone.now()
     instance.save()
-    send_mail(
-        'Business Permit - Process Update',
-        compose_email(instance),
-        request.user.email,
-        [instance.user.email,],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            'Business Permit - Process Update',
+            compose_email(instance),
+            request.user.email,
+            [instance.user.email,],
+            fail_silently=False,
+        )
+    except SMTPDataError:
+        pass
     return redirect_with_params('system:index', status='3')
 
 
@@ -189,13 +195,16 @@ def confirm_issuance(request, pk):
     instance = get_object_or_404(BusinessPermit, pk=pk)
     instance.status = Status.ISSUED
     instance.save()
-    send_mail(
-        'Business Permit - Process Update',
-        compose_email(instance),
-        request.user.email,
-        [instance.user.email,],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            'Business Permit - Process Update',
+            compose_email(instance),
+            request.user.email,
+            [instance.user.email,],
+            fail_silently=False,
+        )
+    except SMTPDataError:
+        pass
     return redirect_with_params('system:index', status='4')
 
 
