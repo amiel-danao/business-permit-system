@@ -210,7 +210,7 @@
                     <div class="row">
                         {% include 'partials/_certificate.html' %}
                     </div> 
-                    {% form.instance.status == 5 %}
+                    {% if form.instance.status == 5 %}
                     <div class="row">
                         {% include 'partials/_permit.html' %}
                     </div>
