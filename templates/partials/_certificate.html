@@ -101,7 +101,7 @@
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
                             <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
-                            {% if form.instance.status == 5 or form.instance.status == 4 %}
+                            {% if form.instance.status == 5%}
                             <input type="number" name="processing_fee" value="{{ form.instance.processing_fee }}" min="0" class="form-control-plaintext" required readonly>
                             {% else %}
                             <input type="number" name="processing_fee" value="{{ form.instance.processing_fee }}" min="0" class="form-control" required>
@@ -116,7 +116,7 @@
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
                             <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
-                            {% if form.instance.status == 5 or form.instance.status == 4%}
+                            {% if form.instance.status == 5%}
                             <input type="number" name="business_permit_fee" value="{{ form.instance.business_permit_fee }}" min="0" class="form-control-plaintext" required readonly>
                             {% else %}
                             <input type="number" name="business_permit_fee" value="{{ form.instance.business_permit_fee }}" min="0" class="form-control" required>
@@ -131,7 +131,7 @@
                     <div class="col border border-dark fw-bold">
                         <div class="input-group">
                             <span class="input-group-text" data-html2canvas-ignore="true">₱</span>
-                            {% if form.instance.status == 5 or form.instance.status == 4%}
+                            {% if form.instance.status == 5%}
                             <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control-plaintext" required readonly>
                             {% else %}
                             <input type="number" name="sticker_fee" value="{{ form.instance.sticker_fee }}" min="0" class="form-control" required >

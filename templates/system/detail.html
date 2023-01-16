@@ -198,14 +198,14 @@
                 {% include 'partials/_deny_view.html' %}
             {% endif %}
             
-            {% if form and request.user.is_superuser and form.instance.status == 3 or form.instance.status == 4 %}
+            {% if form and request.user.is_superuser and form.instance.status == 3%}
                 <div class="tab-pane fade show active" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
                     {% include 'partials/_certificate.html' %}
                 </div>
             {% endif %}
 
-            {% if form and form.instance.status == 4 or form.instance.status == 5%}
-                {% if not request.user.is_superuser and  form.instance.status == 5 %}
+            {% if form %}
+                {% if not request.user.is_superuser and form.instance.status == 5 or form.instance.status == 4 %}
                 <div class="container-fluid">
                     <div class="row">
                         {% include 'partials/_certificate.html' %}
