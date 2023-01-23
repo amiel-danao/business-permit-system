@@ -47,6 +47,13 @@ Under System Variables add new
 Variable name : DJANGO_ENV
 Variable value : LOCAL
 
+
+In vscode
+Press Ctrl + Shift + P to open up command pallete
+In the search box Type in : Terminal: Create new terminal
+
+This ff: commands will be executed in cmd/terminal of vscode
+
 python manage.py makemigrations //creates a mapping of python classes into database
 python manage.py migrate // this will perform the actual conversion of python classes into mysql database
 python manage.py createsuperuser //this will create admin account
