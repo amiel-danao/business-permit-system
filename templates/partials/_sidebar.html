@@ -7,7 +7,7 @@
     <a class="nav-link {% if request.path != '/permit/create/'%}{% if page_status == 1 or not page_status %} active{% endif %}{% endif %}" href="{% url 'system:index'%}" id="v-pills-home-tab"  type="button"  aria-selected="true">Permit Applications</a>
     {% endif %}
 
-    <a class="nav-link {% if page_status == 2 %} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a>
+    <!-- <a class="nav-link {% if page_status == 2 %} active{% endif %}" href="{% url 'system:index'%}?status=2" id="v-pills-profile-tab" type="button" aria-selected="false">Denied Applications</a> -->
     {% if request.user.is_superuser %}
     <a class="nav-link {% if page_status == 3 %} active{% endif %}" href="{% url 'system:index'%}?status=3" id="v-pills-profile-tab" type="button" aria-selected="false">For Assessment of Fees</a>
     <a class="nav-link {% if page_status == 4 %} active{% endif %}" href="{% url 'system:index'%}?status=4" id="v-pills-profile-tab" type="button" aria-selected="false">For Issuance</a>
